@@ -1,0 +1,463 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Dein Fitness-Engpass-Check | Schumann Coaching</title>
+<meta name="description" content="In 2 Minuten herausfinden, was dich bei deinem Ziel ausbremst – inklusive persönlichem Plan.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  /* ====== HIER ANPASSEN ====== */
+  --bg:#f6f2ec; --card:#ffffff; --ink:#1d1b18; --muted:#6b645b; --line:#e6dfd4;
+  --accent:#2f5d50; --accent-ink:#ffffff; --soft:#e8efe9; --warn:#fbf1e3;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:var(--bg);color:var(--ink);font-family:Inter,system-ui,sans-serif;font-size:16px;line-height:1.5;-webkit-font-smoothing:antialiased}
+.wrap{max-width:560px;margin:0 auto;padding:20px 16px 48px;min-height:100dvh;display:flex;flex-direction:column}
+header{display:flex;justify-content:space-between;align-items:center;font-size:13px;color:var(--muted);margin-bottom:18px}
+header b{color:var(--ink);font-weight:600;letter-spacing:.02em}
+.bar{height:4px;background:var(--line);border-radius:4px;overflow:hidden;margin-bottom:28px}
+.bar i{display:block;height:100%;width:0;background:var(--accent);transition:width .35s ease}
+h1,h2{font-family:Fraunces,Georgia,serif;font-weight:700;line-height:1.15;letter-spacing:-.01em}
+h1{font-size:30px;margin-bottom:14px}
+h2{font-size:24px;margin-bottom:8px}
+h3{font-size:15px;font-weight:600;margin:22px 0 8px}
+p{color:var(--muted)}
+.step{animation:in .3s ease}
+@keyframes in{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.hint{font-size:14px;color:var(--muted);margin-bottom:20px}
+.opts{display:grid;gap:10px;margin-top:18px}
+.opt{width:100%;text-align:left;background:var(--card);border:1.5px solid var(--line);border-radius:14px;padding:15px 16px;font:inherit;color:var(--ink);cursor:pointer;transition:border-color .15s,background .15s}
+.opt:hover{border-color:var(--accent)}
+.opt:active,.opt.sel{background:var(--soft);border-color:var(--accent)}
+.scale{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-top:18px}
+.scale .opt{text-align:center;padding:14px 0;font-weight:600}
+.scale-l{display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin-top:8px}
+.btn{display:block;width:100%;text-align:center;background:var(--accent);color:var(--accent-ink);border:0;border-radius:14px;padding:16px;font:inherit;font-weight:600;cursor:pointer;text-decoration:none;margin-top:14px}
+.btn.ghost{background:transparent;color:var(--accent);border:1.5px solid var(--accent)}
+.back{background:none;border:0;color:var(--muted);font:inherit;font-size:14px;margin-top:22px;cursor:pointer;align-self:flex-start}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:20px;margin-top:16px}
+.tag{display:inline-block;font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--accent);background:var(--soft);border-radius:999px;padding:4px 10px;margin-bottom:10px}
+.card p{color:var(--ink)}
+.kpis{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:6px}
+.kpi{background:var(--soft);border-radius:12px;padding:12px}
+.kpi b{display:block;font-family:Fraunces,Georgia,serif;font-size:24px}
+.kpi span{font-size:13px;color:var(--muted)}
+.meal{display:flex;justify-content:space-between;gap:12px;padding:12px 0;border-top:1px solid var(--line)}
+.meal:first-of-type{border-top:0}
+.meal small{color:var(--muted);white-space:nowrap}
+ul.list{list-style:none;margin-top:6px}
+ul.list li{padding:8px 0 8px 22px;position:relative;border-top:1px solid var(--line)}
+ul.list li:first-child{border-top:0}
+ul.list li:before{content:"";position:absolute;left:2px;top:16px;width:8px;height:8px;border-radius:50%;background:var(--accent)}
+.week{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin-top:8px;text-align:center}
+.day{min-width:0;background:var(--soft);border-radius:10px;padding:8px 2px;font-size:11px;line-height:1.3}
+.day b{display:block;font-size:12px}
+.day.t{background:var(--accent);color:var(--accent-ink)}
+.fields{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:18px}
+label{font-size:13px;color:var(--muted);display:block}
+input{width:100%;margin-top:6px;border:1.5px solid var(--line);border-radius:12px;padding:13px;font:inherit;background:var(--card);color:var(--ink)}
+input:focus{outline:none;border-color:var(--accent)}
+.seg{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:6px}
+.err{color:#a3402a;font-size:14px;margin-top:10px;min-height:20px}
+.note{background:var(--warn);border-radius:12px;padding:12px 14px;font-size:13px;color:var(--ink);margin-top:14px}
+.small{font-size:12px;color:var(--muted);margin-top:18px}
+.hidden{display:none}
+details.rec{border-top:1px solid var(--line);padding:12px 0}
+details.rec summary{list-style:none;display:flex;justify-content:space-between;gap:10px;cursor:pointer;align-items:baseline}
+details.rec summary::-webkit-details-marker{display:none}
+details.rec summary small{color:var(--muted);white-space:nowrap;font-size:13px}
+details.rec[open] summary b{color:var(--accent)}
+.pill{font-style:normal;font-size:11px;font-weight:600;background:var(--soft);color:var(--accent);border-radius:999px;padding:2px 8px;margin-left:4px}
+ul.ing{list-style:none;margin:10px 0 0;font-size:14px}
+ul.ing li{padding:3px 0 3px 16px;position:relative}
+ul.ing li:before{content:"–";position:absolute;left:0;color:var(--muted)}
+ol.steps{margin:10px 0 0 20px;font-size:14px;color:var(--muted)}
+ol.steps li{padding:2px 0}
+p.cat{font-size:12px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--accent);margin-top:14px}
+@media print{details.rec>*{display:block}}
+@media print{.noprint{display:none!important}body{background:#fff}.card{break-inside:avoid}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="noprint"><b>Schumann Coaching</b><span id="count"></span></header>
+  <div class="bar noprint"><i id="prog"></i></div>
+  <main id="app"></main>
+</div>
+
+<script>
+/* ===================== EINSTELLUNGEN ===================== */
+const CONFIG = {
+  calendly: "https://calendly.com/philip-schumann/erstgespraech",               // ← Calendly-Link einsetzen
+  instagram: "philip.schumann",
+  endpoint: "APPS_SCRIPT_URL_HIER",              // ← Web-App-URL aus Google Apps Script
+};
+/* ======================================================== */
+
+const params = new URLSearchParams(location.search);
+const NAME = (params.get("name") || "").replace(/[^\p{L}\s\-]/gu,"").trim().slice(0,30);
+const SRC = (params.get("v") || params.get("src") || "").slice(0,20);
+const SID = Date.now().toString(36)+Math.random().toString(36).slice(2,7);
+const A = {}; // Antworten
+const S = {ernaehrung:0, routine:0, training:0, kopf:0};
+let history = [];
+
+const Q = [
+ {id:"ziel", q:"Was ist gerade dein Hauptziel?", o:[
+   ["Abnehmen","abnehmen"],["Muskeln aufbauen","muskeln"],
+   ["Straffer werden (Fett weg, Muskeln dazu)","straffer"],["Wieder fit werden & dranbleiben","fit"]]},
+ {id:"ausschluss", q:"Trifft das gerade auf dich zu?", hint:"Wichtig, damit der Plan zu dir passt.", o:[
+   ["Nein","nein"],["Ja, ich bin schwanger oder stille","ja"]]},
+ {id:"dauer", q:"Wie lange beschäftigt dich das Ziel schon?", o:[
+   ["Erst seit Kurzem","kurz"],["Ein paar Monate","monate"],["1–3 Jahre","jahre"],["Gefühlt schon ewig","ewig",{kopf:1}]]},
+ {id:"probiert", q:"Was hast du schon ausprobiert?", o:[
+   ["Noch nichts Richtiges","nichts",{ernaehrung:1}],["Diäten oder Kalorienzählen","diaet",{kopf:1,routine:1}],
+   ["Training, aber ohne richtigen Plan","training",{training:2}],["Schon vieles – nichts hat lange gehalten","vieles",{routine:2}]]},
+ {id:"essen", q:"Wie sieht dein Essen unter der Woche aus?", o:[
+   ["Ich esse, was gerade da ist","spontan",{ernaehrung:2,routine:1}],["Eigentlich gesund, aber ohne Plan","gesund",{ernaehrung:1,routine:1}],
+   ["Mal super, mal komplett daneben","schwankend",{kopf:2}],["Ziemlich strukturiert","struktur",{}]]},
+ {id:"wasessen", q:"Weißt du, was und wie viel du essen solltest?", o:[
+   ["Ehrlich gesagt: nein","nein",{ernaehrung:3}],["Grob, aber nicht konkret","grob",{ernaehrung:2}],
+   ["Ja, ich setz es nur nicht um","umsetzung",{routine:2,kopf:1}],["Ja, und ich mach's auch","ja",{}]]},
+ {id:"training", q:"Wie oft trainierst du aktuell?", o:[
+   ["Gar nicht","0",{training:2}],["Unregelmäßig","unregel",{training:1,routine:1}],
+   ["1–2× pro Woche","1-2",{training:1}],["3× oder öfter","3+",{}]]},
+ {id:"kipppunkt", q:"Wann läuft es meistens aus dem Ruder?", o:[
+   ["Abends & beim Snacken","abends",{kopf:2}],["Am Wochenende","wochenende",{routine:2}],
+   ["An stressigen Tagen ohne Plan","stress",{routine:3}],["Wenn ich nicht weiß, was ich kochen soll","kochen",{ernaehrung:2,routine:1}]]},
+ {id:"planung", q:"Wie planst du deine Woche, was Essen & Training angeht?", o:[
+   ["Gar nicht – ich schau, wie's kommt","gar",{routine:3}],["Im Kopf, aber es hält selten","kopf",{routine:2}],
+   ["Ich plane, aber werf's schnell wieder um","umwerfen",{kopf:1,routine:1}],["Feste Tage & Einkaufsliste","fest",{}]]},
+ {id:"warum", q:"Warum ist dir das gerade jetzt wichtig?", o:[
+   ["Ich fühl mich in meinem Körper nicht mehr wohl","wohl"],["Ich will mehr Energie & Gesundheit","energie"],
+   ["Ein Ereignis steht an","ereignis"],["Ich will es endlich einmal richtig schaffen","endlich"]]},
+ {id:"wichtig", type:"scale", q:"Wie wichtig ist es dir, das in den nächsten 3 Monaten zu lösen?"},
+ {id:"hilfe", q:"Wie willst du es angehen?", o:[
+   ["Alleine – ich brauch nur den richtigen Plan","alleine"],["Mit Unterstützung – alleine hat's nicht geklappt","unterstuetzung"],
+   ["Weiß ich noch nicht","offen"]]},
+];
+const TOTAL = Q.length;
+
+const TYPES = {
+ ernaehrung:{name:"Der Ernährungs-Blindflieger", text:"Du bist motiviert, aber dir fehlt die Klarheit, was und wie viel du konkret essen sollst. Ohne diese Basis ist jeder Tag ein Ratespiel – und Ratespiele gewinnt man selten.",
+   hebel:"Feste Kalorien- und Proteinzahl plus 3–4 Standard-Mahlzeiten, die du immer wieder isst. Du musst nicht jeden Tag neu entscheiden.",
+   task:"Wähle aus deinem Plan unten 2 Frühstücke und 2 Mittagessen und iss diese Woche nur diese. Fokus: jede Mahlzeit mit Protein-Quelle."},
+ routine:{name:"Der Struktur-Sucher", text:"Wissen ist nicht dein Problem – Planung ist es. Sobald der Alltag stressig wird oder das Wochenende kommt, fällt alles weg, weil nichts vorbereitet ist.",
+   hebel:"Ein fester Wochenrhythmus: ein Planungs- und Einkaufstag, feste Trainingstage im Kalender und ein Notfall-Essen für stressige Tage.",
+   task:"Nimm dir diesen Sonntag 20 Minuten: Trainingstage in den Kalender eintragen, Einkaufsliste aus deinem Plan schreiben, 2 Mahlzeiten vorkochen."},
+ training:{name:"Der Trainings-Zufall", text:"Du bewegst dich zu wenig oder ohne roten Faden. Dein Körper bekommt keinen klaren Reiz – deshalb tut sich trotz Mühe zu wenig.",
+   hebel:"2–3 feste Ganzkörper-Einheiten pro Woche mit Fortschritt (jede Woche etwas mehr Gewicht oder Wiederholungen).",
+   task:"Leg diese Woche 2 feste Trainingstermine in den Kalender – wie ein Arzttermin. Notiere bei jeder Übung Gewicht und Wiederholungen."},
+ kopf:{name:"Der Alles-oder-Nichts-Typ", text:"Du kannst es eigentlich – aber ein schlechter Abend oder ein ausgelassenes Training kippt dann gleich die ganze Woche. Das Problem ist nicht die Disziplin, sondern der Anspruch, perfekt zu sein.",
+   hebel:"Die 80-%-Regel: Ein ‚Ausrutscher‘ ist eine Mahlzeit, kein Tag und keine Woche. Plus ein fester Abend-Snack im Plan, damit Heißhunger nicht gewinnt.",
+   task:"Plane diese Woche bewusst einen Abend-Snack mit Protein ein und schreib jeden Abend eine Sache auf, die gut lief."},
+};
+
+/* ---------- Rendering ---------- */
+const app = document.getElementById("app");
+const esc = s => String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+function progress(i){
+  document.getElementById("prog").style.width = (i/TOTAL*100)+"%";
+  document.getElementById("count").textContent = i>0 && i<=TOTAL ? `Frage ${i} von ${TOTAL}` : "";
+}
+function view(html){ app.innerHTML = `<div class="step">${html}</div>`; window.scrollTo(0,0); }
+
+function intro(){
+  progress(0);
+  view(`
+    <h1>${NAME?`Hey ${esc(NAME)}, f`:"F"}inde heraus, was dich gerade wirklich ausbremst.</h1>
+    <p>12 kurze Fragen, nur Klicken. Am Ende bekommst du deinen Engpass-Typ, den wichtigsten Hebel – und auf Wunsch direkt deinen persönlichen Ernährungsplan mit Rezepten und Einkaufsliste.</p>
+    <button class="btn" onclick="ask(0)">Check starten · 2 Min</button>
+    <p class="small">Kostenlos, ohne Anmeldung.</p>`);
+}
+
+function ask(i){
+  if(i>=TOTAL) return result();
+  const q = Q[i]; progress(i+1);
+  let body;
+  if(q.type==="scale"){
+    body = `<div class="scale">${[1,2,3,4,5,6,7,8,9,10].map(n=>`<button class="opt" onclick="pick(${i},${n})">${n}</button>`).join("")}</div>
+            <div class="scale-l"><span>nice to have</span><span>muss jetzt passieren</span></div>`;
+  } else {
+    body = `<div class="opts">${q.o.map((o,k)=>`<button class="opt" onclick="pick(${i},${k})">${esc(o[0])}</button>`).join("")}</div>`;
+  }
+  view(`<h2>${esc(q.q)}</h2>${q.hint?`<p class="hint">${esc(q.hint)}</p>`:""}${body}
+        ${i>0?`<button class="back" onclick="back()">← zurück</button>`:""}`);
+}
+
+function pick(i,k){
+  const q = Q[i];
+  if(q.type==="scale"){ A[q.id]=k; }
+  else {
+    const o=q.o[k]; A[q.id]=o[1];
+    const w=o[2]||{}; for(const key in w) S[key]+=w[key];
+    history.push({i, w});
+    if(q.id==="ausschluss" && o[1]==="ja") return excluded();
+  }
+  if(q.type==="scale") history.push({i,w:{}});
+  ask(i+1);
+}
+function back(){
+  const h=history.pop(); if(!h) return intro();
+  for(const k in h.w) S[k]-=h.w[k];
+  delete A[Q[h.i].id]; ask(h.i);
+}
+
+function excluded(){
+  progress(TOTAL);
+  send({status:"ausgeschlossen"});
+  view(`<h2>Danke für deine Ehrlichkeit${NAME?", "+esc(NAME):""} 💛</h2>
+    <p>In der Schwangerschaft und Stillzeit braucht dein Körper eine ganz eigene Begleitung – ein Plan mit Kaloriendefizit wäre hier nicht das Richtige. Sprich am besten mit deiner Hebamme oder deinem Arzt darüber.</p>
+    <p style="margin-top:12px">Folg mir gerne weiter – wenn die Zeit für dich passt, bin ich da.</p>
+    <a class="btn ghost" href="https://ig.me/m/${CONFIG.instagram}">Zurück zu Instagram</a>`);
+}
+
+/* ---------- Ergebnis ---------- */
+let TYPE;
+function result(){
+  progress(TOTAL);
+  const order=["routine","ernaehrung","kopf","training"]; // bei Gleichstand: Reihenfolge
+  TYPE = order.reduce((a,b)=>S[b]>S[a]?b:a, order[0]);
+  const t=TYPES[TYPE];
+  send({status:"diagnose"});
+  view(`
+    <span class="tag">Dein Engpass-Typ</span>
+    <h1>${t.name}</h1>
+    <p>${t.text}</p>
+    <div class="card"><h3 style="margin-top:0">Dein größter Hebel</h3><p>${t.hebel}</p></div>
+    <div class="card"><h3 style="margin-top:0">Deine Aufgabe für die nächsten 7 Tage</h3><p>${t.task}</p></div>
+    <div class="card" style="background:var(--soft);border:0">
+      <h3 style="margin-top:0">Willst du deinen Plan dazu?</h3>
+      <p>Mit 4 Angaben rechne ich dir Kalorien und Protein aus und baue dir einen Rezeptplan mit Einkaufsliste und Wochenstruktur – passend zu deinem Engpass.</p>
+      <button class="btn" onclick="planForm()">Ja, Rezeptplan erstellen</button>
+    </div>`);
+}
+
+/* ---------- Plan ---------- */
+let P={};
+function planForm(){
+  document.getElementById("count").textContent="Fast fertig";
+  view(`
+    <h2>Noch 4 Angaben für deinen Plan</h2>
+    <p class="hint">Bleibt nur zwischen dir und mir.</p>
+    <label>Geschlecht</label>
+    <div class="seg"><button class="opt" id="g-w" onclick="sex('w')">Frau</button><button class="opt" id="g-m" onclick="sex('m')">Mann</button></div>
+    <div class="fields">
+      <label>Alter<input id="age" type="number" inputmode="numeric" placeholder="z. B. 34"></label>
+      <label>Größe (cm)<input id="h" type="number" inputmode="numeric" placeholder="z. B. 168"></label>
+      <label>Gewicht (kg)<input id="w" type="number" inputmode="decimal" placeholder="z. B. 74"></label>
+      <label>Alltag<select id="act" style="width:100%;margin-top:6px;border:1.5px solid var(--line);border-radius:12px;padding:13px;font:inherit;background:var(--card)">
+        <option value="1.3">Viel Sitzen</option><option value="1.45" selected>Gemischt</option><option value="1.6">Viel auf den Beinen</option></select></label>
+    </div>
+    <div class="err" id="err"></div>
+    <button class="btn" onclick="buildPlan()">Meinen Plan bauen</button>
+    <button class="back" onclick="result()">← zurück zum Ergebnis</button>`);
+}
+function sex(s){ P.sex=s; document.getElementById("g-w").classList.toggle("sel",s==="w"); document.getElementById("g-m").classList.toggle("sel",s==="m"); }
+
+const r5 = x => Math.max(5, Math.round(x/5)*5);
+function buildPlan(){
+  const age=+document.getElementById("age").value, h=+document.getElementById("h").value,
+        w=+String(document.getElementById("w").value).replace(",","."), act=+document.getElementById("act").value;
+  const err=document.getElementById("err");
+  if(!P.sex) return err.textContent="Bitte wähl dein Geschlecht aus.";
+  if(!(age>=18&&age<=75)) return err.textContent="Der Plan ist für 18–75 Jahre gedacht.";
+  if(!(h>=140&&h<=215)) return err.textContent="Bitte gib deine Größe in cm an.";
+  if(!(w>=40&&w<=200)) return err.textContent="Bitte gib dein Gewicht in kg an.";
+  Object.assign(P,{age,h,w,act});
+
+  const bmr = 10*w + 6.25*h - 5*age + (P.sex==="m"?5:-161);
+  const tdee = bmr*act;
+  const adj = {abnehmen:-0.2, straffer:-0.12, fit:-0.08, muskeln:0.08}[A.ziel] ?? -0.1;
+  let kcal = tdee*(1+adj);
+  if(adj<0) kcal=Math.max(kcal, tdee-600);
+  kcal = Math.max(kcal, P.sex==="m"?1600:1300);
+  kcal = Math.round(kcal/50)*50;
+  const refW = Math.min(w, (h-100)*1.15);
+  const protein = Math.round(refW*(A.ziel==="muskeln"?2.0:1.8)/5)*5;
+  Object.assign(P,{kcal,protein,tdee:Math.round(tdee)});
+  send({status:"plan"});
+  renderPlan();
+}
+
+/* ---------- Rezepte ----------
+   Zutat: [Name, Menge, kcal/100g, Protein/100g, skalierbar?, Einheit-Stückgewicht (optional), Einkaufs-Kategorie]
+   Mengen = Basisportion; skalierbare Zutaten werden auf die Kalorien der Mahlzeit angepasst. */
+const N = {
+  skyr:["Skyr",63,11,"Kühlregal"], quark:["Magerquark",70,12,"Kühlregal"], huette:["Körniger Frischkäse",98,12,"Kühlregal"],
+  milch:["Milch 1,5 %",47,3.4,"Kühlregal"], ei:["Eier",140,12.5,"Kühlregal"], tofu:["Naturtofu",120,13,"Kühlregal"],
+  hafer:["Haferflocken",370,13.5,"Vorrat"], brot:["Vollkornbrot",220,8,"Brot"], wrap:["Vollkorn-Wraps",300,9,"Brot"],
+  reis:["Reis (gekocht)",130,2.7,"Vorrat"], nudeln:["Vollkornnudeln (gekocht)",150,6,"Vorrat"], kart:["Kartoffeln",75,2,"Obst & Gemüse"],
+  haehn:["Hähnchenbrust",110,23,"Fleisch & Fisch"], hack:["Rinderhack 5 %",125,21,"Fleisch & Fisch"], lachs:["Lachsfilet",200,20,"Fleisch & Fisch"],
+  thun:["Thunfisch (im eigenen Saft)",110,25,"Vorrat"], kidney:["Kidneybohnen (Dose)",90,7,"Vorrat"], tomat:["Passierte Tomaten",30,1.5,"Vorrat"],
+  gemuese:["Gemüse nach Wahl (z. B. Paprika, Zucchini)",30,2,"Obst & Gemüse"], brokkoli:["Brokkoli",35,3,"Obst & Gemüse"], salat:["Salat & Gurke",15,1,"Obst & Gemüse"],
+  beeren:["Beeren (TK)",45,1,"Tiefkühl"], apfel:["Apfel",52,0.3,"Obst & Gemüse"], banane:["Banane",90,1,"Obst & Gemüse"],
+  oel:["Olivenöl",880,0,"Vorrat"], nuss:["Erdnussmus",600,25,"Vorrat"], whey:["Proteinpulver",380,75,"Vorrat"], kakao:["Backkakao",350,20,"Vorrat"],
+};
+// [key, Basis-g, skalieren?, Stückgewicht]
+const R = {
+ fruehstueck:[
+  {n:"Beeren-Skyr-Bowl", t:["schnell"], i:[["skyr",250,1],["hafer",40,1],["beeren",120,0],["nuss",10,1]],
+   s:["Skyr in eine Schüssel geben.","Haferflocken und TK-Beeren drüber (die tauen in 5 Min. an).","Erdnussmus darüber träufeln – fertig."]},
+  {n:"Overnight Protein-Oats", t:["prep"], i:[["hafer",50,1],["milch",150,1],["whey",25,1],["banane",60,0]],
+   s:["Abends alles in ein Glas, gut verrühren.","Über Nacht in den Kühlschrank.","Morgens Banane drauf schneiden. Tipp: gleich 3 Gläser vorbereiten."]},
+  {n:"Rührei mit Vollkornbrot", t:["warm"], i:[["ei",180,1,60],["brot",70,1],["huette",60,1],["gemuese",100,0]],
+   s:["Eier verquirlen, in einer beschichteten Pfanne stocken lassen.","Brot mit körnigem Frischkäse bestreichen.","Mit Tomate oder Paprika servieren."]},
+ ],
+ mittag:[
+  {n:"Hähnchen-Reis-Bowl", t:["prep"], i:[["haehn",150,1],["reis",180,1],["gemuese",200,0],["oel",8,1]],
+   s:["Hähnchen würfeln, würzen (Paprika, Salz, Pfeffer) und in Öl anbraten.","Gemüse kurz mitbraten.","Mit Reis in eine Box – hält 3 Tage im Kühlschrank."]},
+  {n:"Schnelle Bolognese", t:["warm"], i:[["hack",130,1],["nudeln",180,1],["tomat",200,0],["oel",5,1]],
+   s:["Hack in Öl krümelig anbraten.","Passierte Tomaten dazu, mit Oregano, Salz, Pfeffer 10 Min. köcheln.","Über die Nudeln geben."]},
+  {n:"Thunfisch-Wrap", t:["schnell"], i:[["wrap",60,1,60],["thun",120,1],["huette",60,1],["salat",80,0]],
+   s:["Thunfisch abtropfen und mit körnigem Frischkäse mischen, würzen.","Auf den Wrap streichen, Salat und Gurke drauf.","Einrollen, halbieren – fertig in 5 Minuten."]},
+ ],
+ snack:[
+  {n:"Körniger Frischkäse mit Apfel", t:["schnell"], i:[["huette",200,1],["apfel",150,0]],
+   s:["Apfel in Stücke schneiden.","Zum körnigen Frischkäse essen – mit Zimt schmeckt's wie Dessert."]},
+  {n:"Schoko-Protein-Quark", t:["abend"], i:[["quark",200,1],["kakao",8,0],["banane",60,0]],
+   s:["Quark mit Kakao und etwas Süße (z. B. Süßstoff) glatt rühren.","Banane drauf schneiden.","Perfekt als eingeplanter Abend-Snack gegen Heißhunger."]},
+ ],
+ abend:[
+  {n:"Ofen-Lachs mit Kartoffeln", t:["warm"], i:[["lachs",130,1],["kart",300,1],["brokkoli",200,0]],
+   s:["Ofen auf 200 °C vorheizen, Kartoffeln vierteln, 15 Min. vorbacken.","Lachs und Brokkoli aufs Blech, würzen.","Alles zusammen weitere 15 Min. backen."]},
+  {n:"Chili con Carne", t:["prep"], i:[["hack",120,1],["kidney",100,1],["tomat",200,0],["reis",120,1]],
+   s:["Hack anbraten, mit Chili, Kreuzkümmel, Salz würzen.","Tomaten und abgetropfte Bohnen dazu, 15 Min. köcheln.","Mit Reis servieren – große Portion kochen und einfrieren."]},
+  {n:"Tofu-Gemüse-Pfanne", t:["schnell"], i:[["tofu",200,1],["reis",150,1],["gemuese",250,0],["oel",8,1]],
+   s:["Tofu in Würfel schneiden und in Öl knusprig braten.","Gemüse dazu, mit Sojasauce und Knoblauch abschmecken.","Mit Reis servieren."]},
+ ],
+};
+const SHARE = {fruehstueck:.25, mittag:.32, snack:.13, abend:.30};
+const LABEL = {fruehstueck:"Frühstück", mittag:"Mittag", snack:"Snack", abend:"Abendessen"};
+
+function scaleRecipe(r, target){
+  const base = r.i.reduce((s,[k,g])=>s+g*N[k][1]/100,0);
+  const fixed = r.i.filter(x=>!x[2]).reduce((s,[k,g])=>s+g*N[k][1]/100,0);
+  const fac = Math.min(1.8, Math.max(0.6, (target-fixed)/(base-fixed)));
+  let kcal=0, prot=0;
+  const items = r.i.map(([k,g,sc,piece])=>{
+    let amt = sc ? g*fac : g, label;
+    if(piece){ const n=Math.max(1,Math.round(amt/piece)); amt=n*piece; label=`${n} ${N[k][0]}`; if(k==="ei")label=`${n} ${n>1?"Eier":"Ei"}`; if(k==="wrap")label=`${n} ${n>1?"Vollkorn-Wraps":"Vollkorn-Wrap"}`; }
+    else { amt = amt<20 ? Math.max(5,Math.round(amt)) : r5(amt); label=`${amt} g ${N[k][0]}`; }
+    kcal += amt*N[k][1]/100; prot += amt*N[k][2]/100;
+    return {k, amt, label};
+  });
+  return {...r, items, kcal:Math.round(kcal/10)*10, prot:Math.round(prot)};
+}
+
+function orderFor(meal){
+  const list=[...R[meal]];
+  const pref = TYPE==="routine" ? "prep" : TYPE==="kopf" && meal==="snack" ? "abend" : TYPE==="ernaehrung" ? "schnell" : "";
+  return pref ? list.sort((a,b)=>(b.t.includes(pref))-(a.t.includes(pref))) : list;
+}
+
+function recipeHTML(meal){
+  const target = P.kcal*SHARE[meal];
+  const rs = orderFor(meal).map(r=>scaleRecipe(r,target));
+  return `<h3>${LABEL[meal]}</h3>` + rs.map((r,idx)=>`
+    <details class="rec" ${idx===0?"open":""}>
+      <summary><span><b>${r.n}</b>${r.t.includes("prep")?' <em class="pill">Meal-Prep</em>':""}</span><small>${r.kcal} kcal · ${r.prot} g P</small></summary>
+      <ul class="ing">${r.items.map(x=>`<li>${x.label}</li>`).join("")}</ul>
+      <ol class="steps">${r.s.map(x=>`<li>${x}</li>`).join("")}</ol>
+    </details>`).join("");
+}
+
+function shoppingHTML(){
+  const sum = {};
+  ["fruehstueck","mittag","snack","abend"].forEach(m=>{
+    const r = scaleRecipe(orderFor(m)[0], P.kcal*SHARE[m]);
+    r.items.forEach(x=>{ sum[x.k]=(sum[x.k]||0)+x.amt*5; });
+  });
+  const cats = {};
+  for(const k in sum){ const c=N[k][3]; (cats[c]=cats[c]||[]).push(k); }
+  const fmt = (k,g)=> k==="apfel" ? `${Math.ceil(g/150)} Äpfel` : k==="banane" ? `${Math.ceil(g/120)} Bananen` : k==="reis" ? `${Math.round(g/3/50)*50} g Reis (roh)` : k==="nudeln" ? `${Math.round(g/2.5/50)*50} g Vollkornnudeln (roh)` : k==="ei" ? `${Math.round(g/60)} Eier` : k==="wrap" ? `${Math.round(g/60)} Wraps` : g>=1000 ? `${(Math.round(g/100)/10).toString().replace(".",",")} kg ${N[k][0]}` : `${Math.round(g/10)*10} g ${N[k][0]}`;
+  return Object.keys(cats).map(c=>`<p class="cat">${c}</p><ul class="ing">${cats[c].map(k=>`<li>${fmt(k,sum[k])}</li>`).join("")}</ul>`).join("");
+}
+
+const PLAN_INTRO = {
+  ernaehrung:"Nimm diese Woche bei jeder Mahlzeit einfach die erste Option und wiederhole sie. Keine Entscheidungen mehr – das ist dein Hebel.",
+  routine:"Die Meal-Prep-Rezepte stehen bei dir vorne: Sonntag einmal kochen, unter der Woche nur noch aufwärmen.",
+  training:"Die Mahlzeiten liefern dir genug Protein, damit dein Training auch wirklich Muskeln aufbaut.",
+  kopf:"Dein Abend-Snack ist fest eingeplant – so hat Heißhunger keine Chance, die Woche zu kippen.",
+};
+
+function renderPlan(){
+  const t=TYPES[TYPE];
+  const tDays = A.training==="3+"||A.ziel==="muskeln" ? 3 : 2;
+  const pattern = tDays===3 ? ["Mo","Mi","Fr"] : ["Di","Do"];
+  const days=["Mo","Di","Mi","Do","Fr","Sa","So"];
+  const dayTxt = d => pattern.includes(d) ? "Sport" : d==="So" ? "Planen" : d==="Sa" ? "Aktiv" : "Gehen";
+  const routine = {
+    ernaehrung:["Iss die ganze Woche aus denselben 3–4 Mahlzeiten oben – Abwechslung kommt später.","Jede Mahlzeit startet mit der Protein-Quelle auf dem Teller.","Einkaufsliste einmal schreiben, jede Woche wiederverwenden."],
+    routine:["Sonntag = Planungstag: Kalender, Einkauf, 2 Mahlzeiten vorkochen.","Notfall-Essen im Haus (z. B. Skyr, Thunfisch, Wraps) für stressige Tage.","Trainingstermine stehen fest im Kalender wie ein Arzttermin."],
+    training:["Ganzkörpertraining: Kniebeuge, Rudern, Drücken, Hüftstrecken, je 3 Sätze.","Jede Woche bei einer Übung etwas mehr Gewicht oder 1 Wiederholung mehr.","An trainingsfreien Tagen: 7.000–8.000 Schritte."],
+    kopf:["Der Snack am Abend ist eingeplant – kein Verbot, keine Schuld.","Ausrutscher = eine Mahlzeit. Die nächste Mahlzeit ist wieder nach Plan.","Jeden Abend eine Sache notieren, die heute gut lief."],
+  }[TYPE];
+
+  view(`
+    <span class="tag">Dein Plan · ${t.name}</span>
+    <h1>${NAME?esc(NAME)+", hier ist":"Hier ist"} dein Startplan</h1>
+    <div class="card">
+      <div class="kpis">
+        <div class="kpi"><b>${P.kcal}</b><span>kcal pro Tag</span></div>
+        <div class="kpi"><b>${P.protein} g</b><span>Protein pro Tag</span></div>
+      </div>
+      <p class="small" style="margin-top:12px">Dein geschätzter Bedarf liegt bei ca. ${P.tdee} kcal. ${A.ziel==="muskeln"?"Leichter Überschuss für Muskelaufbau.":"Moderates Defizit – spürbar, aber alltagstauglich."}</p>
+    </div>
+    <div class="card">
+      <h3 style="margin-top:0">Dein Rezeptplan</h3>
+      <p>${PLAN_INTRO[TYPE]}</p>
+      ${["fruehstueck","mittag","snack","abend"].map(recipeHTML).join("")}
+      <p class="small">Mengen sind auf deine Kalorien angepasst. Pro Mahlzeit eine Option wählen – tippe auf ein Rezept, um es aufzuklappen.</p>
+    </div>
+    <div class="card">
+      <details class="rec">
+        <summary><span><b>Einkaufsliste für 5 Tage</b></span><small>aufklappen</small></summary>
+        <p class="small" style="margin-top:6px">Basiert auf der jeweils ersten Option pro Mahlzeit.</p>
+        ${shoppingHTML()}
+      </details>
+    </div>
+    <div class="card">
+      <h3 style="margin-top:0">Deine Woche</h3>
+      <div class="week">${days.map(d=>`<div class="day ${pattern.includes(d)?"t":""}"><b>${d}</b>${dayTxt(d)}</div>`).join("")}</div>
+      <h3>Deine 3 Regeln für Struktur</h3>
+      <ul class="list">${routine.map(x=>`<li>${x}</li>`).join("")}</ul>
+    </div>
+    <div class="note">Tipp: Mach jetzt einen Screenshot von deinem Plan, damit du ihn immer dabei hast.</div>
+    ${cta()}
+    <p class="small">Richtwerte für gesunde Erwachsene, keine medizinische Beratung. Bei Vorerkrankungen sprich bitte vorher mit deinem Arzt.</p>`);
+}
+
+function cta(){
+  const hot = (A.wichtig>=7) && A.hilfe!=="alleine";
+  const igText = encodeURIComponent(`Hey Philip, hab den Check gemacht – mein Typ: ${TYPES[TYPE].name}`);
+  const book = `<div class="card noprint" style="background:var(--accent);border:0">
+      <h3 style="margin-top:0;color:#fff">Den Plan umsetzen – mit mir an deiner Seite</h3>
+      <p style="color:#e3ece7">Der Plan ist dein Start. Ob du ihn im Alltag durchziehst, entscheidet die Umsetzung. Lass uns in einem kostenlosen Gespräch schauen, wie das bei dir konkret aussieht.</p>
+      <a class="btn" style="background:#fff;color:var(--accent)" href="${CONFIG.calendly}" target="_blank" onclick="send({status:'calendly_klick'})">Kostenloses Erstgespräch buchen</a>
+    </div>`;
+  const ig = `<a class="btn ${hot?"ghost":""} noprint" href="https://ig.me/m/${CONFIG.instagram}?text=${igText}" onclick="copyRes();send({status:'insta_klick'})">Ergebnis an Philip schicken</a>`;
+  return hot ? book + ig : `<div class="card noprint"><h3 style="margin-top:0">Fragen zu deinem Plan?</h3><p>Schick mir dein Ergebnis auf Instagram – ich sag dir, womit du am besten startest.</p>${ig}</div>
+    <a class="btn ghost noprint" style="border:0" href="${CONFIG.calendly}" target="_blank" onclick="send({status:'calendly_klick'})">Oder direkt ein kostenloses Gespräch buchen</a>`;
+}
+function copyRes(){
+  const txt=`Hey Philip, hab den Check gemacht – mein Typ: ${TYPES[TYPE].name}${P.kcal?` (Plan: ${P.kcal} kcal, ${P.protein} g Protein)`:""}`;
+  try{ navigator.clipboard.writeText(txt); }catch(e){}
+}
+
+/* ---------- Daten an Google Sheet ---------- */
+function send(extra){
+  if(!CONFIG.endpoint.startsWith("http")) return;
+  const data = {sid:SID, zeit:new Date().toISOString(), name:NAME, quelle:SRC, typ:TYPE?TYPES[TYPE].name:"", ...A, ...S,
+    geschlecht:P.sex||"", alter:P.age||"", groesse:P.h||"", gewicht:P.w||"", kcal:P.kcal||"", protein:P.protein||"",
+    heiss: (A.wichtig>=7 && A.hilfe!=="alleine") ? "JA" : "", ...extra};
+  try{ fetch(CONFIG.endpoint,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain"},body:JSON.stringify(data)}); }catch(e){}
+}
+
+intro();
+</script>
+</body>
+</html>
