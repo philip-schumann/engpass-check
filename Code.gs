@@ -23,6 +23,7 @@ function doPost(e) {
       sh.setFrozenRows(1);
     }
     // Kopfzeile aktuell halten (neue Spalten ergänzen)
+    if (sh.getMaxColumns() < COLS.length) sh.insertColumnsAfter(sh.getMaxColumns(), COLS.length - sh.getMaxColumns());
     if (sh.getRange(1, COLS.length).getValue() !== COLS[COLS.length - 1]) sh.getRange(1, 1, 1, COLS.length).setValues([COLS]);
     const ids = sh.getRange(1, 1, sh.getLastRow(), 1).getValues().flat();
     let row = ids.indexOf(d.sid) + 1;
