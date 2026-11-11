@@ -72,12 +72,15 @@ h4{font-weight:600;font-size:1.375rem;line-height:1.2;margin:22px 0 0}
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
 .field{display:flex;flex-direction:column;gap:6px;min-width:0}
 label{display:block;font-size:.8125rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
-input,select{width:100%;font:inherit;font-size:1.0625rem;color:var(--ink);background:var(--bg);border:1.5px solid var(--line);border-radius:12px;padding:13px 14px}
+input,select,textarea{width:100%;font:inherit;font-size:1.0625rem;color:var(--ink);background:var(--bg);border:1.5px solid var(--line);border-radius:12px;padding:13px 14px}
 input:focus-visible,select:focus-visible{outline:3px solid var(--accent);outline-offset:1px;border-color:var(--accent)}
 .seg{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .seg .opt{text-align:center;min-height:52px;padding:12px}
 .err{background:var(--warn);color:#6B4A00;border-radius:10px;padding:12px 14px;font-size:.9375rem}
 .err:empty{display:none}
+.quote{background:var(--surface);border-left:4px solid var(--accent);border-radius:12px;padding:14px 16px;margin-top:12px;font-size:1.0625rem}
+.quote small{display:block;color:var(--muted);font-size:.8125rem;margin-bottom:4px}
+textarea{resize:vertical;min-height:84px}
 .note{background:var(--warn);color:#6B4A00;border-radius:12px;padding:14px 16px;font-size:.9375rem}
 details.rec{border:1.5px solid var(--line);border-radius:14px;padding:14px 16px;margin-top:10px}
 details.more{margin-top:12px}
@@ -131,14 +134,15 @@ let history = [];
 const Q = [
  {id:"ziel", q:"Was ist gerade dein Hauptziel?", o:[
    ["Abnehmen","abnehmen"],["Muskeln aufbauen","muskeln"],
-   ["Straffer werden (Fett weg, Muskeln dazu)","straffer"],["Wieder fit werden & dranbleiben","fit"]]},
- {id:"ausschluss", q:"Trifft das gerade auf dich zu?", hint:"Wichtig, damit der Plan zu dir passt.", o:[
-   ["Nein","nein"],["Ja, ich bin schwanger oder stille","ja"]]},
+   ["Straffer werden (Fett weg, Muskeln dazu)","straffer"],["Gesund zunehmen","zunehmen"],["Wieder fit werden & dranbleiben","fit"]]},
+ {id:"ausschluss", q:"Bist du gerade schwanger oder stillst du?", hint:"Wichtig, damit der Plan zu dir passt.", o:[
+   ["Ja, ich bin schwanger oder stille","ja"],["Nein","nein"]]},
  {id:"dauer", q:"Wie lange beschäftigt dich das Ziel schon?", o:[
    ["Erst seit Kurzem","kurz"],["Ein paar Monate","monate"],["1–3 Jahre","jahre"],["Gefühlt schon ewig","ewig",{kopf:1}]]},
  {id:"probiert", q:"Was hast du schon ausprobiert?", o:[
    ["Noch nichts Richtiges","nichts",{ernaehrung:1}],["Diäten oder Kalorienzählen","diaet",{kopf:1,routine:1}],
-   ["Training, aber ohne richtigen Plan","training",{training:2}],["Schon vieles – nichts hat lange gehalten","vieles",{routine:2}]]},
+   ["Training, aber ohne richtigen Plan","training",{training:2}],["Schon vieles – nichts hat lange gehalten","vieles",{routine:2}],
+   ["Bisher hat es bei mir einfach nicht funktioniert – das frustriert mich","frust",{kopf:2,routine:1}]]},
  {id:"essen", q:"Wie sieht dein Essen unter der Woche aus?", o:[
    ["Ich esse, was gerade da ist","spontan",{ernaehrung:2,routine:1}],["Eigentlich gesund, aber ohne Plan","gesund",{ernaehrung:1,routine:1}],
    ["Mal super, mal komplett daneben","schwankend",{kopf:2}],["Ziemlich strukturiert","struktur",{}]]},
@@ -154,6 +158,9 @@ const Q = [
  {id:"planung", q:"Wie planst du deine Woche, was Essen & Training angeht?", o:[
    ["Gar nicht – ich schau, wie's kommt","gar",{routine:3}],["Im Kopf, aber es hält selten","kopf",{routine:2}],
    ["Ich plane, aber werf's schnell wieder um","umwerfen",{kopf:1,routine:1}],["Feste Tage & Einkaufsliste","fest",{}]]},
+ {id:"seit", q:"Wann hast du zum ersten Mal gedacht: „So kann es nicht weitergehen“?", o:[
+   ["Gerade erst – in den letzten Tagen","tage"],["Vor ein paar Wochen","wochen"],
+   ["Vor ein paar Monaten","monate"],["Vor über einem Jahr – und seitdem hat sich nichts geändert","jahr",{kopf:1}]]},
  {id:"warum", q:"Warum ist dir das gerade jetzt wichtig?", o:[
    ["Ich fühl mich in meinem Körper nicht mehr wohl","wohl"],["Ich will mehr Energie & Gesundheit","energie"],
    ["Ein Ereignis steht an","ereignis"],["Ich will es endlich einmal richtig schaffen","endlich"]]},
@@ -162,7 +169,7 @@ const Q = [
    ["Alleine – ich brauch nur den richtigen Plan","alleine"],["Mit Unterstützung – alleine hat's nicht geklappt","unterstuetzung"],
    ["Weiß ich noch nicht","offen"]]},
 ];
-const TOTAL = Q.length;
+const TOTAL = Q.length + 1; // + Schritt „in deinen Worten“
 
 const TYPES = {
  ernaehrung:{name:"Der Ernährungs-Blindflieger", text:"Du bist motiviert, aber dir fehlt die Klarheit, was und wie viel du konkret essen sollst. Ohne diese Basis ist jeder Tag ein Ratespiel – und Ratespiele gewinnt man selten.",
@@ -194,7 +201,7 @@ function intro(){
     <div class="hero">
       <h3>Fitness-Engpass-Check</h3>
       <h1>${NAME?`Hey ${esc(NAME)}, f`:"F"}inde heraus, was dich gerade wirklich ausbremst.</h1>
-      <p class="lede">12 kurze Fragen, nur Klicken. Etwa 2 Minuten, kostenlos und ohne Anmeldung.</p>
+      <p class="lede">14 kurze Fragen, fast nur Klicken. Etwa 3 Minuten, kostenlos und ohne Anmeldung.</p>
       <button class="btn" onclick="ask(0)">Check starten</button>
     </div>
     <div class="sect">
@@ -208,7 +215,8 @@ function intro(){
 }
 
 function ask(i){
-  if(i>=TOTAL) return result();
+  if(i===Q.length) return textStep();
+  if(i>Q.length) return result();
   const q = Q[i]; progress(i+1);
   let body;
   if(q.type==="scale"){
@@ -219,6 +227,23 @@ function ask(i){
   }
   view(`<div class="quiz"><h2>${esc(q.q)}</h2>${q.hint?`<p class="lede">${esc(q.hint)}</p>`:""}${body}
         ${i>0?`<button class="back" onclick="back()">Zurück zur letzten Frage</button>`:""}</div>`);
+}
+
+function textStep(){
+  progress(Q.length+1);
+  view(`<div class="quiz"><h2>Zwei letzte Fragen – in deinen eigenen Worten</h2>
+    <p class="lede">Optional, aber genau das macht deinen Plan persönlich. Ein Satz reicht.</p>
+    <div class="field"><label for="t1">Was würde es für dich bedeuten, wenn sich das in 3 Monaten wirklich geändert hätte?</label>
+      <textarea id="t1" maxlength="300" placeholder="Schreib's einfach so, wie es dir kommt …">${esc(A.bedeutung||"")}</textarea></div>
+    <div class="field" style="margin-top:14px"><label for="t2">Was wäre dieses Mal anders als bei deinen bisherigen Versuchen?</label>
+      <textarea id="t2" maxlength="300" placeholder="z. B. mehr Struktur, jemand an meiner Seite …">${esc(A.anders||"")}</textarea></div>
+    <button class="btn" style="margin-top:18px" onclick="saveText()">Weiter zu meinem Ergebnis</button>
+    <button class="back" onclick="back()">Zurück zur letzten Frage</button></div>`);
+}
+function saveText(){
+  A.bedeutung = document.getElementById("t1").value.trim().slice(0,300);
+  A.anders = document.getElementById("t2").value.trim().slice(0,300);
+  result();
 }
 
 function pick(i,k){
@@ -266,6 +291,7 @@ function result(){
       <h2 class="big">${t.name}</h2>
       <p>${t.text}</p>
     </div>
+    ${A.bedeutung?`<div class="sect"><h3>Dein Grund</h3><p>Das hast du über dein Ziel geschrieben:</p><div class="quote"><small>In deinen Worten</small>„${esc(A.bedeutung)}“</div>${A.anders?`<div class="quote"><small>Dieses Mal anders</small>„${esc(A.anders)}“</div>`:""}<p style="margin-top:12px">Genau daran messen wir den Plan unten. Er soll dich dorthin bringen.</p></div>`:""}
     <div class="sect"><h3>Dein größter Hebel</h3><p>${t.hebel}</p></div>
     <div class="sect"><h3>Deine Aufgabe für die nächsten 7 Tage</h3><ol class="nsteps"><li><span>${t.task}</span></li></ol></div>
     <div class="sect"><h3>So verteilt sich dein Profil</h3><div class="bars">${bars}</div></div>
@@ -313,15 +339,25 @@ function buildPlan(){
   const dv=document.getElementById("diet").value;
   Object.assign(P,{age,h,w,act,diet:dv==="lf"?"":dv,lf:dv==="lf"});
 
+  const bmi = w/((h/100)**2);
+  if(bmi<16.5){
+    send({status:"untergewicht"});
+    return view(`<div class="hero"><h3>Danke für deine Ehrlichkeit</h3><h2 class="big">${NAME?esc(NAME)+", d":"D"}anke dir 💛</h2>
+      <p>Bei deinen Angaben wäre ein Ernährungsplan aus einem Online-Check nicht das Richtige. Sprich bitte zuerst mit deinem Arzt oder deiner Ärztin darüber, wie du gut und sicher zu mehr Kraft und Gewicht kommst.</p>
+      <p>Wenn du magst, schreib mir einfach auf Instagram. Ich höre dir gern zu.</p>
+      <a class="btn ghost" href="https://ig.me/m/${CONFIG.instagram}">Zurück zu Instagram</a></div>`);
+  }
+  P.goal = (bmi<18.5 && !["zunehmen","muskeln"].includes(A.ziel)) ? "zunehmen" : A.ziel;
+  P.lowBmi = bmi<18.5;
   const bmr = 10*w + 6.25*h - 5*age + (P.sex==="m"?5:-161);
   const tdee = bmr*act;
-  const adj = {abnehmen:-0.2, straffer:-0.12, fit:-0.08, muskeln:0.08}[A.ziel] ?? -0.1;
+  const adj = {abnehmen:-0.2, straffer:-0.12, fit:-0.08, muskeln:0.08, zunehmen:0.12}[P.goal] ?? -0.1;
   let kcal = tdee*(1+adj);
   if(adj<0) kcal=Math.max(kcal, tdee-600);
   kcal = Math.max(kcal, P.sex==="m"?1600:1300);
   kcal = Math.round(kcal/50)*50;
   const refW = Math.min(w, (h-100)*1.15);
-  const protein = Math.round(refW*(A.ziel==="muskeln"?2.0:1.8)/5)*5;
+  const protein = Math.round(refW*(P.goal==="muskeln"?2.0:1.8)/5)*5;
   Object.assign(P,{kcal,protein,tdee:Math.round(tdee)});
   send({status:"plan"});
   renderPlan();
@@ -520,7 +556,7 @@ const PLAN_INTRO = {
 
 function renderPlan(){
   const t=TYPES[TYPE];
-  const tDays = A.training==="3+"||A.ziel==="muskeln" ? 3 : 2;
+  const tDays = A.training==="3+"||P.goal==="muskeln"||P.goal==="zunehmen" ? 3 : 2;
   const pattern = tDays===3 ? ["Mo","Mi","Fr"] : ["Di","Do"];
   const days=["Mo","Di","Mi","Do","Fr","Sa","So"];
   const dayTxt = d => pattern.includes(d) ? "Sport" : d==="So" ? "Planen" : d==="Sa" ? "Aktiv" : "Gehen";
@@ -539,7 +575,7 @@ function renderPlan(){
         <div class="kpi"><b>${P.kcal}</b><span>kcal pro Tag</span></div>
         <div class="kpi"><b>${P.protein} g</b><span>Protein pro Tag</span></div>
       </div>
-      <p class="small">Dein geschätzter Bedarf liegt bei ca. ${P.tdee} kcal. ${A.ziel==="muskeln"?"Leichter Überschuss für Muskelaufbau.":"Moderates Defizit – spürbar, aber alltagstauglich."}</p>
+      <p class="small">Dein geschätzter Bedarf liegt bei ca. ${P.tdee} kcal. ${P.goal==="muskeln"?"Leichter Überschuss für Muskelaufbau.":P.goal==="zunehmen"?(P.lowBmi&&A.ziel!=="zunehmen"?"Bei deinem Gewicht ist ein Defizit nicht sinnvoll. Dein Plan liefert dir deshalb einen leichten Überschuss.":"Leichter Überschuss, damit du gesund und kräftig zunimmst."):"Moderates Defizit – spürbar, aber alltagstauglich."}</p>
     </div>
     <div class="sect">
       <h3>Dein Rezeptplan</h3>
@@ -574,6 +610,7 @@ function cta(){
   const ig = `<a class="btn ghost" href="https://ig.me/m/${CONFIG.instagram}?text=${igText}" onclick="copyRes();send({status:'insta_klick'})">Ergebnis an Philip schicken</a>`;
   return hot
    ? `<div class="hero noprint"><h3>Wie geht es jetzt weiter?</h3><h2>Den Plan umsetzen – mit mir an deiner Seite</h2>
+      ${A.bedeutung?`<div class="quote"><small>Dein Ziel in deinen Worten</small>„${esc(A.bedeutung)}“</div>`:""}
       <p>Der Plan ist dein Start. Ob du ihn im Alltag durchziehst, entscheidet die Umsetzung. Lass uns in einem kostenlosen Gespräch schauen, wie das bei dir konkret aussieht.</p>${book}${ig}</div>`
    : `<div class="hero noprint"><h3>Wie geht es jetzt weiter?</h3><h2>Fragen zu deinem Plan?</h2>
       <p>Schick mir dein Ergebnis auf Instagram – ich sag dir, womit du am besten startest.</p>${ig}
