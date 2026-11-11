@@ -80,6 +80,8 @@ input:focus-visible,select:focus-visible{outline:3px solid var(--accent);outline
 .err:empty{display:none}
 .note{background:var(--warn);color:#6B4A00;border-radius:12px;padding:14px 16px;font-size:.9375rem}
 details.rec{border:1.5px solid var(--line);border-radius:14px;padding:14px 16px;margin-top:10px}
+details.more{margin-top:12px}
+details.more>summary{cursor:pointer;color:var(--accent-ink);font-weight:600;padding:10px 0;font-size:1rem}
 details.rec[open]{border-color:var(--accent)}
 details.rec summary{list-style:none;display:flex;justify-content:space-between;gap:10px;cursor:pointer;align-items:baseline;font-size:1.0625rem}
 details.rec summary::-webkit-details-marker{display:none}
@@ -280,7 +282,7 @@ let P={};
 function planForm(){
   document.getElementById("count").textContent="Fast fertig";
   view(`<div class="quiz">
-    <h2>Noch 4 Angaben für deinen Plan</h2>
+    <h2>Noch 5 Angaben für deinen Plan</h2>
     <p class="lede">Bleibt nur zwischen dir und mir.</p>
     <div class="field"><label>Ich bin</label>
       <div class="seg"><button class="opt" id="g-w" onclick="sex('w')">Frau</button><button class="opt" id="g-m" onclick="sex('m')">Mann</button></div></div>
@@ -291,6 +293,8 @@ function planForm(){
       <div class="field"><label for="act">Alltag</label><select id="act">
         <option value="1.3">Viel Sitzen</option><option value="1.45" selected>Gemischt</option><option value="1.6">Viel auf den Beinen</option></select></div>
     </div>
+    <div class="field"><label for="diet">Ernährung</label><select id="diet">
+      <option value="">Ich esse alles</option><option value="veg">Vegetarisch</option><option value="nofish">Kein Fisch</option><option value="lf">Laktosefrei</option></select></div>
     <p class="err" id="err" role="alert"></p>
     <button class="btn" onclick="buildPlan()">Meinen Plan bauen</button>
     <button class="back" onclick="result()">Zurück zum Ergebnis</button></div>`);
@@ -306,7 +310,8 @@ function buildPlan(){
   if(!(age>=18&&age<=75)) return err.textContent="Der Plan ist für 18–75 Jahre gedacht.";
   if(!(h>=140&&h<=215)) return err.textContent="Bitte gib deine Größe in cm an.";
   if(!(w>=40&&w<=200)) return err.textContent="Bitte gib dein Gewicht in kg an.";
-  Object.assign(P,{age,h,w,act});
+  const dv=document.getElementById("diet").value;
+  Object.assign(P,{age,h,w,act,diet:dv==="lf"?"":dv,lf:dv==="lf"});
 
   const bmr = 10*w + 6.25*h - 5*age + (P.sex==="m"?5:-161);
   const tdee = bmr*act;
@@ -328,14 +333,19 @@ function buildPlan(){
 const N = {
   skyr:["Skyr",63,11,"Kühlregal"], quark:["Magerquark",70,12,"Kühlregal"], huette:["Körniger Frischkäse",98,12,"Kühlregal"],
   milch:["Milch 1,5 %",47,3.4,"Kühlregal"], ei:["Eier",140,12.5,"Kühlregal"], tofu:["Naturtofu",120,13,"Kühlregal"],
-  hafer:["Haferflocken",370,13.5,"Vorrat"], brot:["Vollkornbrot",220,8,"Brot"], wrap:["Vollkorn-Wraps",300,9,"Brot"],
-  reis:["Reis (gekocht)",130,2.7,"Vorrat"], nudeln:["Vollkornnudeln (gekocht)",150,6,"Vorrat"], kart:["Kartoffeln",75,2,"Obst & Gemüse"],
-  haehn:["Hähnchenbrust",110,23,"Fleisch & Fisch"], hack:["Rinderhack 5 %",125,21,"Fleisch & Fisch"], lachs:["Lachsfilet",200,20,"Fleisch & Fisch"],
-  thun:["Thunfisch (im eigenen Saft)",110,25,"Vorrat"], kidney:["Kidneybohnen (Dose)",90,7,"Vorrat"], tomat:["Passierte Tomaten",30,1.5,"Vorrat"],
+  mozz:["Light-Mozzarella",165,18,"Kühlregal"], feta:["Feta light",200,17,"Kühlregal"], hummus:["Hummus",230,7,"Kühlregal"],
+  hafer:["Haferflocken",370,13.5,"Vorrat"], brot:["Vollkornbrot",220,8,"Brot"], wrap:["Vollkorn-Wraps",300,9,"Brot"], waffel:["Reiswaffeln",380,8,"Brot"],
+  reis:["Reis (gekocht)",130,2.7,"Vorrat"], nudeln:["Vollkornnudeln (gekocht)",150,6,"Vorrat"], kart:["Kartoffeln",75,2,"Obst & Gemüse"], suess:["Süßkartoffeln",86,1.6,"Obst & Gemüse"],
+  haehn:["Hähnchenbrust",110,23,"Fleisch & Fisch"], hack:["Rinderhack 5 %",125,21,"Fleisch & Fisch"], pute:["Putenbrust-Aufschnitt",105,20,"Fleisch & Fisch"],
+  lachs:["Lachsfilet",200,20,"Fleisch & Fisch"], raeucher:["Räucherlachs",180,22,"Fleisch & Fisch"], garnele:["Garnelen",85,18,"Fleisch & Fisch"],
+  thun:["Thunfisch (im eigenen Saft)",110,25,"Vorrat"], kidney:["Kidneybohnen (Dose)",90,7,"Vorrat"], linsen:["Linsen (Dose, gekocht)",115,9,"Vorrat"], kicher:["Kichererbsen (Dose)",120,8,"Vorrat"],
+  tomat:["Passierte Tomaten",30,1.5,"Vorrat"],
   gemuese:["Gemüse nach Wahl (z. B. Paprika, Zucchini)",30,2,"Obst & Gemüse"], brokkoli:["Brokkoli",35,3,"Obst & Gemüse"], salat:["Salat & Gurke",15,1,"Obst & Gemüse"],
-  beeren:["Beeren (TK)",45,1,"Tiefkühl"], apfel:["Apfel",52,0.3,"Obst & Gemüse"], banane:["Banane",90,1,"Obst & Gemüse"],
+  spinat:["Blattspinat (TK)",25,3,"Tiefkühl"], beeren:["Beeren (TK)",45,1,"Tiefkühl"], apfel:["Apfel",52,0.3,"Obst & Gemüse"], banane:["Banane",90,1,"Obst & Gemüse"], avocado:["Avocado",160,2,"Obst & Gemüse"],
   oel:["Olivenöl",880,0,"Vorrat"], nuss:["Erdnussmus",600,25,"Vorrat"], whey:["Proteinpulver",380,75,"Vorrat"], kakao:["Backkakao",350,20,"Vorrat"],
 };
+// Ernährungsform: Fleisch/Fisch-Zutaten für "vegetarisch" bzw. "kein Fisch"; Milchprodukte werden bei "laktosefrei" als laktosefreie Variante ausgewiesen
+const MEAT = new Set(["haehn","hack","pute"]), FISH = new Set(["lachs","raeucher","garnele","thun"]), DAIRY = new Set(["skyr","quark","huette","milch","mozz","feta"]);
 // [key, Basis-g, skalieren?, Stückgewicht]
 const R = {
  fruehstueck:[
@@ -345,6 +355,26 @@ const R = {
    s:["Abends alles in ein Glas, gut verrühren.","Über Nacht in den Kühlschrank.","Morgens Banane drauf schneiden. Tipp: gleich 3 Gläser vorbereiten."]},
   {n:"Rührei mit Vollkornbrot", t:["warm"], i:[["ei",180,1,60],["brot",70,1],["huette",60,1],["gemuese",100,0]],
    s:["Eier verquirlen, in einer beschichteten Pfanne stocken lassen.","Brot mit körnigem Frischkäse bestreichen.","Mit Tomate oder Paprika servieren."]},
+  {n:"Ei-Muffins mit Gemüse", t:["prep"], i:[["ei",180,1,60],["gemuese",100,0],["mozz",30,0]],
+   s:["Eier verquirlen, klein geschnittenes Gemüse und Mozzarella unterrühren.","In Muffinförmchen füllen, 20 Min. bei 180 °C backen.","Sonntags backen – im Kühlschrank 3–4 Tage haltbar."]},
+  {n:"Spinat-Omelett", t:["warm"], i:[["spinat",100,0],["ei",180,1,60],["huette",50,1],["oel",5,0]],
+   s:["Spinat in einer Pfanne mit etwas Öl zusammenfallen lassen.","Verquirlte Eier darübergeben und stocken lassen.","Körnigen Frischkäse in die Mitte, zuklappen."]},
+  {n:"Rührei mit Räucherlachs", t:["schnell"], i:[["ei",120,1,60],["raeucher",60,1],["salat",80,0],["oel",5,0]],
+   s:["Eier bei niedriger Hitze cremig rühren.","Räucherlachs und Schnittlauch unterheben.","Mit Gurkenscheiben servieren – fertig in 8 Minuten."]},
+  {n:"Protein-Pfannkuchen mit Beeren", t:["warm"], i:[["ei",120,1,60],["quark",100,1],["hafer",30,1],["beeren",100,0],["oel",5,0]],
+   s:["Eier, Quark und Haferflocken mit Zimt mixen.","In einer beschichteten Pfanne beidseitig goldbraun braten.","Mit Beeren servieren."]},
+  {n:"Protein-Porridge", t:["warm"], i:[["hafer",50,1],["milch",200,1],["whey",20,1],["apfel",100,0]],
+   s:["Haferflocken mit Milch 3–4 Min. aufkochen.","Vom Herd nehmen, Proteinpulver glatt einrühren.","Apfel klein schneiden, Zimt drüber."]},
+  {n:"Quarkbrot mit Beeren", t:["schnell"], i:[["brot",90,1],["quark",150,1],["beeren",80,0]],
+   s:["Brot dick mit Magerquark bestreichen.","Beeren darauf verteilen.","Optional mit Zimt oder etwas Süßstoff abrunden."]},
+  {n:"Herzhaftes Hüttenkäse-Brot", t:["schnell"], i:[["brot",100,1],["huette",120,1],["gemuese",100,0]],
+   s:["Brot mit körnigem Frischkäse belegen.","Tomate oder Gurke drauf schneiden.","Salz, Pfeffer, Schnittlauch – fertig."]},
+  {n:"Tofu-Rührei", t:["warm"], i:[["tofu",200,1],["brot",70,1],["gemuese",100,0],["oel",5,0]],
+   s:["Tofu mit der Gabel zerbröseln und in Öl anbraten.","Mit Kurkuma, Salz und Pfeffer würzen, Gemüse dazugeben.","Mit Brot servieren."]},
+  {n:"Protein-Smoothie-Bowl", t:["schnell"], i:[["whey",25,1],["banane",100,0],["beeren",100,0],["milch",150,1],["hafer",30,1]],
+   s:["Whey, Banane, Beeren und Milch im Mixer cremig pürieren.","In eine Schüssel füllen.","Haferflocken als Topping drüberstreuen."]},
+  {n:"Avocado-Ei-Brot", t:["warm"], i:[["brot",80,1],["ei",120,1,60],["avocado",50,0],["salat",50,0]],
+   s:["Avocado zerdrücken und aufs Brot streichen.","Eier als Spiegelei oder pochiert braten.","Auf das Brot legen, mit Salz, Pfeffer und Chili würzen."]},
  ],
  mittag:[
   {n:"Hähnchen-Reis-Bowl", t:["prep"], i:[["haehn",150,1],["reis",180,1],["gemuese",200,0],["oel",8,1]],
@@ -353,12 +383,50 @@ const R = {
    s:["Hack in Öl krümelig anbraten.","Passierte Tomaten dazu, mit Oregano, Salz, Pfeffer 10 Min. köcheln.","Über die Nudeln geben."]},
   {n:"Thunfisch-Wrap", t:["schnell"], i:[["wrap",60,1,60],["thun",120,1],["huette",60,1],["salat",80,0]],
    s:["Thunfisch abtropfen und mit körnigem Frischkäse mischen, würzen.","Auf den Wrap streichen, Salat und Gurke drauf.","Einrollen, halbieren – fertig in 5 Minuten."]},
+  {n:"Eiersalat mit Skyr", t:["schnell"], i:[["ei",180,1,60],["skyr",100,0],["brot",50,1],["salat",80,0]],
+   s:["Eier hart kochen (10 Min.), pellen und würfeln.","Mit Skyr, Senf, Gurkenwürfeln und Schnittlauch mischen.","Auf Vollkornbrot geben, Salat dazu."]},
+  {n:"Rührei-Wrap mit Pute", t:["schnell"], i:[["wrap",60,1,60],["ei",120,1,60],["pute",40,0],["salat",80,0],["skyr",30,0]],
+   s:["Eier als Rührei braten.","Wrap mit Rührei, Pute und Salat füllen.","Skyr als Dip dazu."]},
+  {n:"Shakshuka", t:["warm"], i:[["tomat",250,0],["gemuese",100,0],["ei",180,1,60],["oel",5,0]],
+   s:["Zwiebel und Paprika in Öl anbraten, Tomaten und Paprikapulver dazu, 10 Min. köcheln.","Mulden formen, Eier hineingleiten lassen.","Zugedeckt stocken lassen."]},
+  {n:"Linsen-Bowl mit Feta", t:["prep"], i:[["linsen",200,1],["gemuese",150,0],["feta",40,0],["skyr",50,0]],
+   s:["Linsen abspülen und mit angebratenem Gemüse mischen.","Mit Salz, Kreuzkümmel und Zitronensaft abschmecken.","Feta drüber bröseln, Skyr als Dressing dazu."]},
+  {n:"Zucchini-Bowl mit Hähnchen", t:["warm"], i:[["haehn",150,1],["gemuese",300,0],["reis",100,1],["oel",5,0]],
+   s:["Hähnchen in Streifen schneiden und anbraten.","Zucchini und Paprika dazu, 5 Min. mitbraten.","Auf dem Reis anrichten."]},
+  {n:"Gefüllte Paprika mit Thunfisch", t:["warm"], i:[["thun",120,1],["gemuese",250,0],["huette",80,1],["reis",80,1]],
+   s:["Paprika halbieren und entkernen.","Thunfisch, körnigen Frischkäse und Reis mischen, würzen.","Füllen und 20 Min. bei 200 °C backen."]},
+  {n:"Süßkartoffel-Hähnchen-Bowl", t:["prep"], i:[["haehn",150,1],["suess",250,1],["brokkoli",150,0],["oel",5,0]],
+   s:["Süßkartoffeln würfeln und 25 Min. bei 200 °C backen.","Hähnchen anbraten, Brokkoli 5 Min. dämpfen.","Alles in Boxen füllen."]},
+  {n:"Kichererbsen-Salat", t:["schnell"], i:[["kicher",200,1],["salat",150,0],["feta",50,0],["oel",8,0],["brot",40,1]],
+   s:["Kichererbsen abspülen, mit Salat und Gurke mischen.","Feta darüber bröseln.","Mit Öl, Zitrone, Salz beträufeln – Brot dazu."]},
+  {n:"Nudelsalat mit Thunfisch", t:["prep"], i:[["nudeln",200,1],["thun",100,1],["gemuese",150,0],["skyr",40,0]],
+   s:["Nudeln kochen und abkühlen lassen.","Thunfisch, Gemüsewürfel und Skyr untermischen.","Mit Essig, Salz, Pfeffer würzen – hält 2 Tage."]},
+  {n:"Burrito-Bowl", t:["prep"], i:[["kidney",100,1],["reis",150,1],["haehn",120,1],["salat",100,0],["huette",50,0]],
+   s:["Hähnchen mit Paprika und Kreuzkümmel anbraten.","Bohnen erwärmen, Reis dazu.","Mit Salat und körnigem Frischkäse toppen."]},
+  {n:"Kartoffelsalat High Protein", t:["prep"], i:[["kart",300,1],["quark",120,0],["ei",120,0,60],["salat",100,0],["pute",60,0]],
+   s:["Kartoffeln kochen, abkühlen lassen und würfeln.","Quark mit Senf und Essig anrühren, Eier hart kochen und würfeln.","Alles mischen, Gurke und Pute untermengen."]},
  ],
  snack:[
   {n:"Körniger Frischkäse mit Apfel", t:["schnell"], i:[["huette",200,1],["apfel",150,0]],
    s:["Apfel in Stücke schneiden.","Zum körnigen Frischkäse essen – mit Zimt schmeckt's wie Dessert."]},
   {n:"Schoko-Protein-Quark", t:["abend"], i:[["quark",200,1],["kakao",8,0],["banane",60,0]],
    s:["Quark mit Kakao und etwas Süße (z. B. Süßstoff) glatt rühren.","Banane drauf schneiden.","Perfekt als eingeplanter Abend-Snack gegen Heißhunger."]},
+  {n:"Gefüllte Eier mit Thunfisch", t:["prep"], i:[["ei",180,1,60],["thun",60,0],["skyr",30,0]],
+   s:["Eier hart kochen, halbieren.","Eigelb mit Thunfisch, Skyr und Senf cremig rühren.","Zurück ins Eiweiß füllen."]},
+  {n:"Knusper-Snack-Plate", t:["schnell"], i:[["huette",100,1],["gemuese",120,0],["waffel",20,0],["pute",40,0]],
+   s:["Gemüse in Sticks schneiden.","Mit Pute, Reiswaffeln und körnigem Frischkäse auf einem Teller anrichten.","Fertig – perfekt für unterwegs."]},
+  {n:"Skyr mit Beeren & Zimt", t:["abend"], i:[["skyr",250,1],["beeren",100,0]],
+   s:["Skyr in eine Schale geben.","Aufgetaute Beeren und Zimt drüber."]},
+  {n:"Protein-Shake mit Banane", t:["schnell"], i:[["whey",30,1],["milch",250,1],["banane",100,0]],
+   s:["Alles im Shaker oder Mixer schütteln.","Direkt trinken – 1 Minute."]},
+  {n:"Hummus mit Gemüse-Sticks", t:["schnell"], i:[["hummus",60,1],["gemuese",200,0],["waffel",20,0]],
+   s:["Gemüse in Sticks schneiden.","Mit Hummus und Reiswaffeln servieren."]},
+  {n:"Reiswaffeln mit Quark & Beeren", t:["abend"], i:[["waffel",40,0],["quark",150,1],["beeren",80,0]],
+   s:["Quark glatt rühren, auf die Reiswaffeln streichen.","Beeren darauf verteilen."]},
+  {n:"Putenrollen mit Frischkäse", t:["schnell"], i:[["pute",80,1],["huette",80,1],["gemuese",100,0]],
+   s:["Pute mit körnigem Frischkäse bestreichen.","Gemüsestreifen darauflegen und einrollen."]},
+  {n:"Thunfisch-Gurken-Happen", t:["schnell"], i:[["salat",150,0],["thun",100,1],["skyr",30,0]],
+   s:["Gurke in dicke Scheiben schneiden.","Thunfisch mit Skyr, Salz und Pfeffer mischen und drauf geben."]},
  ],
  abend:[
   {n:"Ofen-Lachs mit Kartoffeln", t:["warm"], i:[["lachs",130,1],["kart",300,1],["brokkoli",200,0]],
@@ -367,10 +435,31 @@ const R = {
    s:["Hack anbraten, mit Chili, Kreuzkümmel, Salz würzen.","Tomaten und abgetropfte Bohnen dazu, 15 Min. köcheln.","Mit Reis servieren – große Portion kochen und einfrieren."]},
   {n:"Tofu-Gemüse-Pfanne", t:["schnell"], i:[["tofu",200,1],["reis",150,1],["gemuese",250,0],["oel",8,1]],
    s:["Tofu in Würfel schneiden und in Öl knusprig braten.","Gemüse dazu, mit Sojasauce und Knoblauch abschmecken.","Mit Reis servieren."]},
+  {n:"Bratkartoffel-Pfanne mit Ei", t:["warm"], i:[["kart",250,1],["ei",120,1,60],["gemuese",200,0],["huette",80,0],["oel",5,0]],
+   s:["Gekochte Kartoffeln in Scheiben mit Gemüse in Öl braten.","Spiegeleier drauf braten.","Körnigen Frischkäse als Beilage dazu."]},
+  {n:"Ei-Reis-Pfanne", t:["schnell"], i:[["reis",150,1],["ei",180,1,60],["gemuese",150,0],["oel",5,0]],
+   s:["Reis und TK-Gemüse in Öl anbraten.","Zur Seite schieben, Eier daneben rühren.","Alles mischen, mit Sojasauce würzen."]},
+  {n:"Spinat-Tomaten-Omelett", t:["schnell"], i:[["ei",240,1,60],["spinat",100,0],["gemuese",100,0],["mozz",40,0]],
+   s:["Spinat und Tomaten kurz anbraten.","Eier darübergießen und stocken lassen.","Mozzarella drauf, zuklappen."]},
+  {n:"Hähnchen-Curry mit Reis", t:["prep"], i:[["haehn",150,1],["tomat",150,0],["gemuese",200,0],["reis",150,1]],
+   s:["Hähnchen würfeln und anbraten, Currypulver dazu.","Tomaten und Gemüse zugeben, 12 Min. köcheln.","Mit Reis servieren. Schmeckt aufgewärmt noch besser."]},
+  {n:"Garnelen-Pfanne mit Nudeln", t:["schnell"], i:[["garnele",150,1],["nudeln",180,1],["gemuese",200,0],["oel",8,1]],
+   s:["Nudeln kochen.","Garnelen mit Knoblauch und Gemüse in Öl 5 Min. braten.","Nudeln untermischen, mit Zitrone abschmecken."]},
+  {n:"Hack-Gemüse-Pfanne", t:["warm"], i:[["hack",130,1],["gemuese",300,0],["kart",150,1]],
+   s:["Kartoffeln würfeln und knusprig braten.","Hack und Gemüse dazugeben, kräftig würzen.","10 Minuten braten – eine Pfanne, fertig."]},
+  {n:"Ofen-Hähnchen mit Kartoffeln", t:["warm"], i:[["haehn",170,1],["kart",250,1],["gemuese",250,0],["oel",8,1]],
+   s:["Alles auf ein Blech, mit Öl, Paprika, Salz mischen.","30 Min. bei 200 °C backen.","Zwischendurch einmal wenden."]},
+  {n:"Linsen-Eintopf", t:["prep"], i:[["linsen",200,1],["gemuese",200,0],["tomat",150,0],["kart",100,1]],
+   s:["Gemüse und Kartoffeln würfeln und kurz anbraten.","Linsen, Tomaten und etwas Wasser dazu, 20 Min. köcheln.","Mit Kreuzkümmel und Essig abschmecken. Lässt sich einfrieren."]},
+  {n:"Lachs-Bowl", t:["schnell"], i:[["lachs",130,1],["reis",150,1],["salat",100,0],["avocado",40,0]],
+   s:["Lachs in der Pfanne 4 Min. pro Seite braten.","Reis, Gurke und Avocado in einer Schüssel anrichten.","Lachs drauflegen, mit Sojasauce beträufeln."]},
+  {n:"Ofengemüse mit Feta & Kichererbsen", t:["warm"], i:[["kicher",150,1],["feta",60,0],["gemuese",300,0],["kart",150,1],["oel",8,0]],
+   s:["Gemüse, Kartoffeln und Kichererbsen mit Öl und Gewürzen aufs Blech.","25 Min. bei 200 °C backen.","Feta drüber bröseln."]},
  ],
 };
 const SHARE = {fruehstueck:.25, mittag:.32, snack:.13, abend:.30};
 const LABEL = {fruehstueck:"Frühstück", mittag:"Mittag", snack:"Snack", abend:"Abendessen"};
+const allowed = r => r.i.every(([k])=> !( (P.diet==="veg" && (MEAT.has(k)||FISH.has(k))) || (P.diet==="nofish" && FISH.has(k)) ));
 
 function scaleRecipe(r, target){
   const base = r.i.reduce((s,[k,g])=>s+g*N[k][1]/100,0);
@@ -381,6 +470,7 @@ function scaleRecipe(r, target){
     let amt = sc ? g*fac : g, label;
     if(piece){ const n=Math.max(1,Math.round(amt/piece)); amt=n*piece; label=`${n} ${N[k][0]}`; if(k==="ei")label=`${n} ${n>1?"Eier":"Ei"}`; if(k==="wrap")label=`${n} ${n>1?"Vollkorn-Wraps":"Vollkorn-Wrap"}`; }
     else { amt = amt<20 ? Math.max(5,Math.round(amt)) : r5(amt); label=`${amt} g ${N[k][0]}`; }
+    if(P.lf && DAIRY.has(k)) label += " (laktosefrei)";
     kcal += amt*N[k][1]/100; prot += amt*N[k][2]/100;
     return {k, amt, label};
   });
@@ -388,20 +478,24 @@ function scaleRecipe(r, target){
 }
 
 function orderFor(meal){
-  const list=[...R[meal]];
+  const list=R[meal].filter(allowed);
   const pref = TYPE==="routine" ? "prep" : TYPE==="kopf" && meal==="snack" ? "abend" : TYPE==="ernaehrung" ? "schnell" : "";
   return pref ? list.sort((a,b)=>(b.t.includes(pref))-(a.t.includes(pref))) : list;
 }
 
-function recipeHTML(meal){
-  const target = P.kcal*SHARE[meal];
-  const rs = orderFor(meal).map(r=>scaleRecipe(r,target));
-  return `<h4>${LABEL[meal]}</h4>` + rs.map((r,idx)=>`
-    <details class="rec" ${idx===0?"open":""}>
+function recDetails(r, open){
+  return `<details class="rec" ${open?"open":""}>
       <summary><span><b>${r.n}</b>${r.t.includes("prep")?' <em class="pill">Meal-Prep</em>':""}</span><small>${r.kcal} kcal · ${r.prot} g P</small></summary>
       <ul class="ing">${r.items.map(x=>`<li>${x.label}</li>`).join("")}</ul>
       <ol class="steps">${r.s.map(x=>`<li>${x}</li>`).join("")}</ol>
-    </details>`).join("");
+    </details>`;
+}
+function recipeHTML(meal){
+  const target = P.kcal*SHARE[meal];
+  const rs = orderFor(meal).map(r=>scaleRecipe(r,target));
+  const top = rs.slice(0,3), rest = rs.slice(3);
+  return `<h4>${LABEL[meal]}</h4>` + top.map((r,idx)=>recDetails(r,idx===0)).join("")
+    + (rest.length ? `<details class="more"><summary>Noch ${rest.length} weitere Optionen</summary>${rest.map(r=>recDetails(r,false)).join("")}</details>` : "");
 }
 
 function shoppingHTML(){
@@ -412,7 +506,8 @@ function shoppingHTML(){
   });
   const cats = {};
   for(const k in sum){ const c=N[k][3]; (cats[c]=cats[c]||[]).push(k); }
-  const fmt = (k,g)=> k==="apfel" ? `${Math.ceil(g/150)} Äpfel` : k==="banane" ? `${Math.ceil(g/120)} Bananen` : k==="reis" ? `${Math.round(g/3/50)*50} g Reis (roh)` : k==="nudeln" ? `${Math.round(g/2.5/50)*50} g Vollkornnudeln (roh)` : k==="ei" ? `${Math.round(g/60)} Eier` : k==="wrap" ? `${Math.round(g/60)} Wraps` : g>=1000 ? `${(Math.round(g/100)/10).toString().replace(".",",")} kg ${N[k][0]}` : `${Math.round(g/10)*10} g ${N[k][0]}`;
+  const lf = k => P.lf && DAIRY.has(k) ? " (laktosefrei)" : "";
+  const fmt = (k,g)=> k==="apfel" ? `${Math.ceil(g/150)} Äpfel` : k==="banane" ? `${Math.ceil(g/120)} Bananen` : k==="avocado" ? `${Math.ceil(g/150)} Avocado${g>150?"s":""}` : k==="reis" ? `${Math.round(g/3/50)*50} g Reis (roh)` : k==="nudeln" ? `${Math.round(g/2.5/50)*50} g Vollkornnudeln (roh)` : k==="ei" ? `${Math.round(g/60)} Eier` : k==="wrap" ? `${Math.round(g/60)} Wraps` : g>=1000 ? `${(Math.round(g/100)/10).toString().replace(".",",")} kg ${N[k][0]}${lf(k)}` : `${Math.round(g/10)*10} g ${N[k][0]}${lf(k)}`;
   return Object.keys(cats).map(c=>`<p class="cat">${c}</p><ul class="ing">${cats[c].map(k=>`<li>${fmt(k,sum[k])}</li>`).join("")}</ul>`).join("");
 }
 
@@ -431,7 +526,7 @@ function renderPlan(){
   const dayTxt = d => pattern.includes(d) ? "Sport" : d==="So" ? "Planen" : d==="Sa" ? "Aktiv" : "Gehen";
   const routine = {
     ernaehrung:["Iss die ganze Woche aus denselben 3–4 Mahlzeiten oben – Abwechslung kommt später.","Jede Mahlzeit startet mit der Protein-Quelle auf dem Teller.","Einkaufsliste einmal schreiben, jede Woche wiederverwenden."],
-    routine:["Sonntag = Planungstag: Kalender, Einkauf, 2 Mahlzeiten vorkochen.","Notfall-Essen im Haus (z. B. Skyr, Thunfisch, Wraps) für stressige Tage.","Trainingstermine stehen fest im Kalender wie ein Arzttermin."],
+    routine:["Sonntag = Planungstag: Kalender, Einkauf, 2 Mahlzeiten vorkochen.","Notfall-Essen im Haus (z. B. Skyr, Wraps, Haferflocken) für stressige Tage.","Trainingstermine stehen fest im Kalender wie ein Arzttermin."],
     training:["Ganzkörpertraining: Kniebeuge, Rudern, Drücken, Hüftstrecken, je 3 Sätze.","Jede Woche bei einer Übung etwas mehr Gewicht oder 1 Wiederholung mehr.","An trainingsfreien Tagen: 7.000–8.000 Schritte."],
     kopf:["Der Snack am Abend ist eingeplant – kein Verbot, keine Schuld.","Ausrutscher = eine Mahlzeit. Die nächste Mahlzeit ist wieder nach Plan.","Jeden Abend eine Sache notieren, die heute gut lief."],
   }[TYPE];
