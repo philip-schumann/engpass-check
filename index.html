@@ -9,79 +9,93 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Figtree:wght@400;500;600&display=swap">
 <style>
 :root{
-  --bg:#FFFFFF; --card:#FFFFFF; --surface:#EDF5EE; --ink:#13241A; --muted:#526457; --line:#D3E0D6;
-  --accent:#2E8B3D; --accent-ink:#1F6B2D; --btn-bg:#267A34; --btn-fg:#FFFFFF;
-  --soft:#FFFFFF; --warn:#FFF3DC;
+  --bg:#FFFFFF; --surface:#EDF5EE; --ink:#13241A; --muted:#526457; --line:#D3E0D6;
+  --accent:#2E8B3D; --accent-ink:#1F6B2D; --btn-bg:#267A34; --btn-fg:#FFFFFF; --warn:#FFF3DC;
   --font-display:"Bricolage Grotesque","Avenir Next","Segoe UI",sans-serif;
   --font-body:"Figtree","Segoe UI",system-ui,sans-serif;
 }
 *{box-sizing:border-box;margin:0;padding:0}
-html,body{background:var(--bg);color:var(--ink);font-family:var(--font-body);font-size:16px;line-height:1.55;-webkit-font-smoothing:antialiased}
-.wrap{max-width:560px;margin:0 auto;padding:20px 16px 48px;min-height:100dvh;display:flex;flex-direction:column}
-header{display:flex;justify-content:space-between;align-items:center;font-size:13px;color:var(--muted);margin-bottom:18px}
-header b{display:flex;align-items:center;gap:10px;color:var(--accent-ink);font-weight:600;letter-spacing:.08em;text-transform:uppercase}
+html,body{background:var(--bg);color:var(--ink);font-family:var(--font-body);font-size:1.0625rem;line-height:1.55;-webkit-font-smoothing:antialiased}
+.wrap{max-width:34rem;margin:0 auto;padding:28px 16px 48px;min-height:100dvh;display:flex;flex-direction:column;gap:28px}
+header{display:flex;justify-content:space-between;align-items:center;font-size:.875rem;color:var(--muted)}
+header b{display:flex;align-items:center;gap:10px;color:var(--accent-ink);font-weight:600;letter-spacing:.08em;text-transform:uppercase;font-size:.8125rem}
 header b:before{content:"";width:10px;height:10px;border-radius:50%;background:var(--accent)}
-.bar{height:6px;background:var(--surface);border-radius:3px;overflow:hidden;margin-bottom:28px}
-.bar i{display:block;height:100%;width:0;background:var(--accent);transition:width .35s ease}
-h1,h2{font-family:var(--font-display);line-height:1.1;letter-spacing:-.02em;text-wrap:balance}
-h1{font-weight:800;font-size:clamp(2rem,9vw,2.6rem);margin-bottom:14px}
-h2{font-weight:600;font-size:1.5rem;margin-bottom:8px}
-h3{font-size:15px;font-weight:600;margin:22px 0 8px}
-p{color:var(--muted)}
-.step{animation:in .3s ease}
+.bar{height:8px;background:var(--surface);border-radius:4px;overflow:hidden;margin-top:-12px}
+.bar i{display:block;height:100%;width:0;background:var(--accent);border-radius:4px;transition:width .35s ease}
+main{min-width:0}
+.step{display:flex;flex-direction:column;gap:28px;min-width:0;animation:in .3s ease}
 @keyframes in{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
-.hint{font-size:14px;color:var(--muted);margin-bottom:20px}
-.opts{display:grid;gap:10px;margin-top:18px}
-.opt{width:100%;text-align:left;background:var(--bg);border:1.5px solid var(--line);border-radius:12px;min-height:52px;padding:14px 16px;font:inherit;color:var(--ink);cursor:pointer;transition:border-color .15s,background .15s}
+p{color:var(--ink)}
+.lede{color:var(--muted);font-size:1.125rem}
+.small{font-size:.8125rem;color:var(--muted)}
+h1,h2,h4{font-family:var(--font-display);text-wrap:balance;letter-spacing:-.02em}
+h1{font-weight:800;font-size:clamp(2.25rem,10.5vw,3rem);line-height:1.03}
+h2{font-weight:600;font-size:1.75rem;line-height:1.15}
+h2.big{font-weight:800;font-size:clamp(2.25rem,10vw,3rem);line-height:1.03;color:var(--accent-ink)}
+h3{font-size:.8125rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin:0 0 8px}
+h4{font-weight:600;font-size:1.375rem;line-height:1.2;margin:22px 0 0}
+.hero{background:var(--surface);border-radius:20px;padding:26px 22px;display:flex;flex-direction:column;gap:14px}
+.hero h1{color:var(--accent-ink)}
+.hero h3{color:var(--accent-ink);margin:0}
+.sect{display:flex;flex-direction:column;min-width:0}
+.quiz{display:flex;flex-direction:column;gap:18px;min-width:0}
+.opts{display:flex;flex-direction:column;gap:12px}
+.opt{width:100%;text-align:left;background:var(--bg);border:1.5px solid var(--line);border-radius:14px;min-height:58px;padding:16px 18px;font:inherit;font-size:1.0625rem;color:var(--ink);cursor:pointer;transition:border-color .15s,background .15s}
 .opt:hover{border-color:var(--accent)}
 .opt:active,.opt.sel{background:var(--surface);border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent)}
-.scale{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-top:18px}
-.scale .opt{text-align:center;padding:14px 0;font-weight:600}
-.scale-l{display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin-top:8px}
-.btn{display:block;width:100%;text-align:center;background:var(--btn-bg);color:var(--btn-fg);border:0;border-radius:10px;padding:15px;font:inherit;font-weight:600;cursor:pointer;text-decoration:none;margin-top:14px}
+.opt:focus-visible,.btn:focus-visible,summary:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.scale{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+.scale .opt{text-align:center;padding:16px 0;font-weight:600;font-size:1.125rem}
+.scale-l{display:flex;justify-content:space-between;font-size:.8125rem;color:var(--muted)}
+.btn{display:block;width:100%;text-align:center;background:var(--btn-bg);color:var(--btn-fg);border:0;border-radius:12px;padding:17px;font:inherit;font-size:1.0625rem;font-weight:600;cursor:pointer;text-decoration:none}
 .btn.ghost{background:transparent;color:var(--accent-ink);border:1.5px solid var(--accent)}
-.back{background:none;border:0;color:var(--muted);font:inherit;font-size:14px;margin-top:22px;cursor:pointer;align-self:flex-start}
-.card{background:var(--surface);border:0;border-radius:16px;padding:20px 18px;margin-top:16px}
-.tag{display:inline-block;font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--accent-ink);background:var(--surface);border-radius:999px;padding:4px 10px;margin-bottom:10px}
-.card p{color:var(--ink)}
-.kpis{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:6px}
-.kpi{background:var(--soft);border-radius:12px;padding:12px}
-.kpi b{display:block;font-family:var(--font-display);font-weight:800;font-size:26px;color:var(--accent-ink)}
-.kpi span{font-size:13px;color:var(--muted)}
-.meal{display:flex;justify-content:space-between;gap:12px;padding:12px 0;border-top:1px solid var(--line)}
-.meal:first-of-type{border-top:0}
-.meal small{color:var(--muted);white-space:nowrap}
-ul.list{list-style:none;margin-top:6px}
-ul.list li{padding:8px 0 8px 22px;position:relative;border-top:1px solid var(--line)}
-ul.list li:first-child{border-top:0}
-ul.list li:before{content:"";position:absolute;left:2px;top:16px;width:8px;height:8px;border-radius:50%;background:var(--accent)}
-.week{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin-top:8px;text-align:center}
-.day{min-width:0;background:var(--bg);border-radius:10px;padding:8px 2px;font-size:11px;line-height:1.3}
-.day b{display:block;font-size:12px}
-.day.t{background:var(--accent);color:var(--accent-ink)}
-.fields{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:18px}
-label{font-size:13px;color:var(--muted);display:block}
-input{width:100%;margin-top:6px;border:1.5px solid var(--line);border-radius:10px;padding:12px;font:inherit;background:var(--bg);color:var(--ink)}
-input:focus{outline:none;border-color:var(--accent)}
-.seg{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:6px}
-.err{color:#a3402a;font-size:14px;margin-top:10px;min-height:20px}
-.note{background:var(--warn);border-radius:12px;padding:12px 14px;font-size:13px;color:var(--ink);margin-top:14px}
-.small{font-size:12px;color:var(--muted);margin-top:18px}
-.hidden{display:none}
-details.rec{border-top:1px solid var(--line);padding:12px 0}
-details.rec summary{list-style:none;display:flex;justify-content:space-between;gap:10px;cursor:pointer;align-items:baseline}
+.back{background:none;border:0;color:var(--accent-ink);font:inherit;font-weight:500;text-decoration:underline;text-underline-offset:3px;padding:6px 0;cursor:pointer;align-self:flex-start}
+.perks{list-style:none;display:flex;flex-direction:column;gap:12px}
+.perks li{display:grid;grid-template-columns:2rem minmax(0,1fr);gap:12px;align-items:start}
+.perks li:before{content:"\2713";width:2rem;height:2rem;border-radius:50%;background:var(--accent);color:#fff;display:grid;place-items:center;font-weight:800}
+.nsteps{list-style:none;display:flex;flex-direction:column;gap:14px;counter-reset:n}
+.nsteps li{counter-increment:n;display:grid;grid-template-columns:2rem minmax(0,1fr);gap:12px;align-items:start}
+.nsteps li:before{content:counter(n);font-family:var(--font-display);font-weight:800;font-size:1.125rem;width:2rem;height:2rem;border-radius:50%;background:var(--accent);color:#fff;display:grid;place-items:center;line-height:1}
+.bars{display:flex;flex-direction:column;gap:12px}
+.barrow{display:grid;grid-template-columns:minmax(0,9.5rem) minmax(0,1fr);gap:12px;align-items:center;font-size:.9375rem}
+.barrow .track{height:12px;background:var(--surface);border-radius:6px;overflow:hidden}
+.barrow .fill{height:100%;background:var(--line);border-radius:6px}
+.barrow.top{font-weight:600}.barrow.top .fill{background:var(--accent)}
+.kpis{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.kpi{background:var(--bg);border-radius:16px;padding:16px}
+.kpi b{display:block;font-family:var(--font-display);font-weight:800;font-size:2.25rem;line-height:1.05;color:var(--accent-ink);font-variant-numeric:tabular-nums}
+.kpi span{font-size:.875rem;color:var(--muted)}
+.week{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;text-align:center}
+.day{min-width:0;background:var(--surface);border-radius:12px;padding:10px 2px;font-size:.75rem;line-height:1.3}
+.day b{display:block;font-size:.8125rem}
+.day.t{background:var(--accent);color:#fff}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.field{display:flex;flex-direction:column;gap:6px;min-width:0}
+label{display:block;font-size:.8125rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+input,select{width:100%;font:inherit;font-size:1.0625rem;color:var(--ink);background:var(--bg);border:1.5px solid var(--line);border-radius:12px;padding:13px 14px}
+input:focus-visible,select:focus-visible{outline:3px solid var(--accent);outline-offset:1px;border-color:var(--accent)}
+.seg{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.seg .opt{text-align:center;min-height:52px;padding:12px}
+.err{background:var(--warn);color:#6B4A00;border-radius:10px;padding:12px 14px;font-size:.9375rem}
+.err:empty{display:none}
+.note{background:var(--warn);color:#6B4A00;border-radius:12px;padding:14px 16px;font-size:.9375rem}
+details.rec{border:1.5px solid var(--line);border-radius:14px;padding:14px 16px;margin-top:10px}
+details.rec[open]{border-color:var(--accent)}
+details.rec summary{list-style:none;display:flex;justify-content:space-between;gap:10px;cursor:pointer;align-items:baseline;font-size:1.0625rem}
 details.rec summary::-webkit-details-marker{display:none}
-details.rec summary small{color:var(--muted);white-space:nowrap;font-size:13px}
-details.rec[open] summary b{color:var(--accent)}
-.pill{font-style:normal;font-size:11px;font-weight:600;background:var(--soft);color:var(--accent);border-radius:999px;padding:2px 8px;margin-left:4px}
-ul.ing{list-style:none;margin:10px 0 0;font-size:14px}
+details.rec summary small{color:var(--muted);white-space:nowrap;font-size:.8125rem}
+details.rec[open] summary b{color:var(--accent-ink)}
+.pill{font-style:normal;font-size:.6875rem;font-weight:600;background:var(--surface);color:var(--accent-ink);border-radius:999px;padding:2px 8px;margin-left:4px}
+ul.ing{list-style:none;margin:12px 0 0;font-size:.9375rem}
 ul.ing li{padding:3px 0 3px 16px;position:relative}
-ul.ing li:before{content:"–";position:absolute;left:0;color:var(--muted)}
-ol.steps{margin:10px 0 0 20px;font-size:14px;color:var(--muted)}
+ul.ing li:before{content:"\2013";position:absolute;left:0;color:var(--muted)}
+ol.steps{margin:12px 0 0 20px;font-size:.9375rem;color:var(--muted)}
 ol.steps li{padding:2px 0}
-p.cat{font-size:12px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--accent);margin-top:14px}
-@media print{details.rec>*{display:block}}
-@media print{.noprint{display:none!important}body{background:#fff}.card{break-inside:avoid}}
+p.cat{font-size:.75rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--accent-ink);margin-top:16px}
+footer{border-top:1px solid var(--line);padding-top:16px;font-size:.8125rem;line-height:1.5;color:var(--muted);display:flex;flex-direction:column;gap:6px}
+footer strong{color:var(--ink);font-weight:600}
+footer p{color:var(--muted)}
+@media print{.noprint,header,.bar,footer{display:none!important}details.rec>*{display:block}}
 </style>
 </head>
 <body>
@@ -89,6 +103,10 @@ p.cat{font-size:12px;font-weight:600;letter-spacing:.05em;text-transform:upperca
   <header class="noprint"><b>Schumann Coaching</b><span id="count"></span></header>
   <div class="bar noprint"><i id="prog"></i></div>
   <main id="app"></main>
+  <footer class="noprint">
+    <p><strong>Philip Schumann, Online-Fitnesscoach</strong></p>
+    <p>Richtwerte für gesunde Erwachsene, keine medizinische Beratung. Bei Vorerkrankungen sprich bitte vorher mit deinem Arzt.</p>
+  </footer>
 </div>
 
 <script>
@@ -171,10 +189,20 @@ function view(html){ app.innerHTML = `<div class="step">${html}</div>`; window.s
 function intro(){
   progress(0);
   view(`
-    <h1>${NAME?`Hey ${esc(NAME)}, f`:"F"}inde heraus, was dich gerade wirklich ausbremst.</h1>
-    <p>12 kurze Fragen, nur Klicken. Am Ende bekommst du deinen Engpass-Typ, den wichtigsten Hebel – und auf Wunsch direkt deinen persönlichen Ernährungsplan mit Rezepten und Einkaufsliste.</p>
-    <button class="btn" onclick="ask(0)">Check starten · 2 Min</button>
-    <p class="small">Kostenlos, ohne Anmeldung.</p>`);
+    <div class="hero">
+      <h3>Fitness-Engpass-Check</h3>
+      <h1>${NAME?`Hey ${esc(NAME)}, f`:"F"}inde heraus, was dich gerade wirklich ausbremst.</h1>
+      <p class="lede">12 kurze Fragen, nur Klicken. Etwa 2 Minuten, kostenlos und ohne Anmeldung.</p>
+      <button class="btn" onclick="ask(0)">Check starten</button>
+    </div>
+    <div class="sect">
+      <h3>Das bekommst du</h3>
+      <ul class="perks">
+        <li><span>Deinen <b>Engpass-Typ</b> und den wichtigsten Hebel für diese Woche</span></li>
+        <li><span>Auf Wunsch deinen <b>Ernährungsplan mit Rezepten</b>, passend zu deinem Ergebnis</span></li>
+        <li><span>Eine <b>Einkaufsliste</b> und eine Wochenstruktur, damit du in die Routine kommst</span></li>
+      </ul>
+    </div>`);
 }
 
 function ask(i){
@@ -187,8 +215,8 @@ function ask(i){
   } else {
     body = `<div class="opts">${q.o.map((o,k)=>`<button class="opt" onclick="pick(${i},${k})">${esc(o[0])}</button>`).join("")}</div>`;
   }
-  view(`<h2>${esc(q.q)}</h2>${q.hint?`<p class="hint">${esc(q.hint)}</p>`:""}${body}
-        ${i>0?`<button class="back" onclick="back()">← zurück</button>`:""}`);
+  view(`<div class="quiz"><h2>${esc(q.q)}</h2>${q.hint?`<p class="lede">${esc(q.hint)}</p>`:""}${body}
+        ${i>0?`<button class="back" onclick="back()">Zurück zur letzten Frage</button>`:""}</div>`);
 }
 
 function pick(i,k){
@@ -212,29 +240,37 @@ function back(){
 function excluded(){
   progress(TOTAL);
   send({status:"ausgeschlossen"});
-  view(`<h2>Danke für deine Ehrlichkeit${NAME?", "+esc(NAME):""} 💛</h2>
+  view(`<div class="hero">
+    <h3>Danke für deine Ehrlichkeit</h3>
+    <h2 class="big">${NAME?esc(NAME)+", d":"D"}anke dir 💛</h2>
     <p>In der Schwangerschaft und Stillzeit braucht dein Körper eine ganz eigene Begleitung – ein Plan mit Kaloriendefizit wäre hier nicht das Richtige. Sprich am besten mit deiner Hebamme oder deinem Arzt darüber.</p>
-    <p style="margin-top:12px">Folg mir gerne weiter – wenn die Zeit für dich passt, bin ich da.</p>
-    <a class="btn ghost" href="https://ig.me/m/${CONFIG.instagram}">Zurück zu Instagram</a>`);
+    <p>Folg mir gerne weiter – wenn die Zeit für dich passt, bin ich da.</p>
+    <a class="btn ghost" href="https://ig.me/m/${CONFIG.instagram}">Zurück zu Instagram</a></div>`);
 }
 
-/* ---------- Ergebnis ---------- */
 let TYPE;
 function result(){
   progress(TOTAL);
   const order=["routine","ernaehrung","kopf","training"]; // bei Gleichstand: Reihenfolge
   TYPE = order.reduce((a,b)=>S[b]>S[a]?b:a, order[0]);
   const t=TYPES[TYPE];
+  const lab={ernaehrung:"Ernährung",routine:"Struktur & Planung",training:"Training",kopf:"Dranbleiben"};
+  const mx=Math.max(1,...Object.values(S));
+  const bars=[...order].sort((a,b)=>S[b]-S[a]).map(k=>`<div class="barrow ${k===TYPE?"top":""}"><span>${lab[k]}</span><div class="track"><div class="fill" style="width:${Math.max(4,Math.round(S[k]/mx*100))}%"></div></div></div>`).join("");
   send({status:"diagnose"});
   view(`
-    <span class="tag">Dein Engpass-Typ</span>
-    <h1>${t.name}</h1>
-    <p>${t.text}</p>
-    <div class="card"><h3 style="margin-top:0">Dein größter Hebel</h3><p>${t.hebel}</p></div>
-    <div class="card"><h3 style="margin-top:0">Deine Aufgabe für die nächsten 7 Tage</h3><p>${t.task}</p></div>
-    <div class="card">
-      <h3 style="margin-top:0">Willst du deinen Plan dazu?</h3>
-      <p>Mit 4 Angaben rechne ich dir Kalorien und Protein aus und baue dir einen Rezeptplan mit Einkaufsliste und Wochenstruktur – passend zu deinem Engpass.</p>
+    <div class="hero">
+      <h3>Dein Engpass-Typ</h3>
+      <h2 class="big">${t.name}</h2>
+      <p>${t.text}</p>
+    </div>
+    <div class="sect"><h3>Dein größter Hebel</h3><p>${t.hebel}</p></div>
+    <div class="sect"><h3>Deine Aufgabe für die nächsten 7 Tage</h3><ol class="nsteps"><li><span>${t.task}</span></li></ol></div>
+    <div class="sect"><h3>So verteilt sich dein Profil</h3><div class="bars">${bars}</div></div>
+    <div class="hero">
+      <h3>Dein nächster Schritt</h3>
+      <h2>Willst du deinen Ernährungsplan dazu?</h2>
+      <p>Mit 4 Angaben rechne ich dir Kalorien und Protein aus und baue dir einen <b>Rezeptplan mit Einkaufsliste</b> und Wochenstruktur – passend zu deinem Engpass.</p>
       <button class="btn" onclick="planForm()">Ja, Rezeptplan erstellen</button>
     </div>`);
 }
@@ -243,21 +279,21 @@ function result(){
 let P={};
 function planForm(){
   document.getElementById("count").textContent="Fast fertig";
-  view(`
+  view(`<div class="quiz">
     <h2>Noch 4 Angaben für deinen Plan</h2>
-    <p class="hint">Bleibt nur zwischen dir und mir.</p>
-    <label>Geschlecht</label>
-    <div class="seg"><button class="opt" id="g-w" onclick="sex('w')">Frau</button><button class="opt" id="g-m" onclick="sex('m')">Mann</button></div>
-    <div class="fields">
-      <label>Alter<input id="age" type="number" inputmode="numeric" placeholder="z. B. 34"></label>
-      <label>Größe (cm)<input id="h" type="number" inputmode="numeric" placeholder="z. B. 168"></label>
-      <label>Gewicht (kg)<input id="w" type="number" inputmode="decimal" placeholder="z. B. 74"></label>
-      <label>Alltag<select id="act" style="width:100%;margin-top:6px;border:1.5px solid var(--line);border-radius:10px;padding:12px;font:inherit;background:var(--bg)">
-        <option value="1.3">Viel Sitzen</option><option value="1.45" selected>Gemischt</option><option value="1.6">Viel auf den Beinen</option></select></label>
+    <p class="lede">Bleibt nur zwischen dir und mir.</p>
+    <div class="field"><label>Ich bin</label>
+      <div class="seg"><button class="opt" id="g-w" onclick="sex('w')">Frau</button><button class="opt" id="g-m" onclick="sex('m')">Mann</button></div></div>
+    <div class="grid2">
+      <div class="field"><label for="age">Alter</label><input id="age" type="number" inputmode="numeric" placeholder="z. B. 34"></div>
+      <div class="field"><label for="h">Größe in cm</label><input id="h" type="number" inputmode="numeric" placeholder="z. B. 168"></div>
+      <div class="field"><label for="w">Gewicht in kg</label><input id="w" type="number" inputmode="decimal" placeholder="z. B. 74"></div>
+      <div class="field"><label for="act">Alltag</label><select id="act">
+        <option value="1.3">Viel Sitzen</option><option value="1.45" selected>Gemischt</option><option value="1.6">Viel auf den Beinen</option></select></div>
     </div>
-    <div class="err" id="err"></div>
+    <p class="err" id="err" role="alert"></p>
     <button class="btn" onclick="buildPlan()">Meinen Plan bauen</button>
-    <button class="back" onclick="result()">← zurück zum Ergebnis</button>`);
+    <button class="back" onclick="result()">Zurück zum Ergebnis</button></div>`);
 }
 function sex(s){ P.sex=s; document.getElementById("g-w").classList.toggle("sel",s==="w"); document.getElementById("g-m").classList.toggle("sel",s==="m"); }
 
@@ -360,7 +396,7 @@ function orderFor(meal){
 function recipeHTML(meal){
   const target = P.kcal*SHARE[meal];
   const rs = orderFor(meal).map(r=>scaleRecipe(r,target));
-  return `<h3>${LABEL[meal]}</h3>` + rs.map((r,idx)=>`
+  return `<h4>${LABEL[meal]}</h4>` + rs.map((r,idx)=>`
     <details class="rec" ${idx===0?"open":""}>
       <summary><span><b>${r.n}</b>${r.t.includes("prep")?' <em class="pill">Meal-Prep</em>':""}</span><small>${r.kcal} kcal · ${r.prot} g P</small></summary>
       <ul class="ing">${r.items.map(x=>`<li>${x.label}</li>`).join("")}</ul>
@@ -401,51 +437,54 @@ function renderPlan(){
   }[TYPE];
 
   view(`
-    <span class="tag">Dein Plan · ${t.name}</span>
-    <h1>${NAME?esc(NAME)+", hier ist":"Hier ist"} dein Startplan</h1>
-    <div class="card">
+    <div class="hero">
+      <h3>Dein Plan · ${t.name}</h3>
+      <h2 class="big">${NAME?esc(NAME)+", d":"D"}ein Startplan</h2>
       <div class="kpis">
         <div class="kpi"><b>${P.kcal}</b><span>kcal pro Tag</span></div>
         <div class="kpi"><b>${P.protein} g</b><span>Protein pro Tag</span></div>
       </div>
-      <p class="small" style="margin-top:12px">Dein geschätzter Bedarf liegt bei ca. ${P.tdee} kcal. ${A.ziel==="muskeln"?"Leichter Überschuss für Muskelaufbau.":"Moderates Defizit – spürbar, aber alltagstauglich."}</p>
+      <p class="small">Dein geschätzter Bedarf liegt bei ca. ${P.tdee} kcal. ${A.ziel==="muskeln"?"Leichter Überschuss für Muskelaufbau.":"Moderates Defizit – spürbar, aber alltagstauglich."}</p>
     </div>
-    <div class="card">
-      <h3 style="margin-top:0">Dein Rezeptplan</h3>
+    <div class="sect">
+      <h3>Dein Rezeptplan</h3>
       <p>${PLAN_INTRO[TYPE]}</p>
       ${["fruehstueck","mittag","snack","abend"].map(recipeHTML).join("")}
-      <p class="small">Mengen sind auf deine Kalorien angepasst. Pro Mahlzeit eine Option wählen – tippe auf ein Rezept, um es aufzuklappen.</p>
+      <p class="small" style="margin-top:14px">Mengen sind auf deine Kalorien angepasst. Pro Mahlzeit eine Option wählen – tippe auf ein Rezept, um es aufzuklappen.</p>
     </div>
-    <div class="card">
+    <div class="sect">
+      <h3>Einkaufsliste</h3>
       <details class="rec">
-        <summary><span><b>Einkaufsliste für 5 Tage</b></span><small>aufklappen</small></summary>
-        <p class="small" style="margin-top:6px">Basiert auf der jeweils ersten Option pro Mahlzeit.</p>
+        <summary><b>Einkaufsliste für 5 Tage</b><small>aufklappen</small></summary>
+        <p class="small" style="margin-top:8px">Basiert auf der jeweils ersten Option pro Mahlzeit.</p>
         ${shoppingHTML()}
       </details>
     </div>
-    <div class="card">
-      <h3 style="margin-top:0">Deine Woche</h3>
+    <div class="sect">
+      <h3>Deine Woche</h3>
       <div class="week">${days.map(d=>`<div class="day ${pattern.includes(d)?"t":""}"><b>${d}</b>${dayTxt(d)}</div>`).join("")}</div>
-      <h3>Deine 3 Regeln für Struktur</h3>
-      <ul class="list">${routine.map(x=>`<li>${x}</li>`).join("")}</ul>
     </div>
-    <div class="note">Tipp: Mach jetzt einen Screenshot von deinem Plan, damit du ihn immer dabei hast.</div>
-    ${cta()}
-    <p class="small">Richtwerte für gesunde Erwachsene, keine medizinische Beratung. Bei Vorerkrankungen sprich bitte vorher mit deinem Arzt.</p>`);
+    <div class="sect">
+      <h3>Deine 3 Regeln für Struktur</h3>
+      <ol class="nsteps">${routine.map(x=>`<li><span>${x}</span></li>`).join("")}</ol>
+    </div>
+    <p class="note">Tipp: Mach jetzt einen Screenshot von deinem Plan, damit du ihn immer dabei hast.</p>
+    ${cta()}`);
 }
 
 function cta(){
   const hot = (A.wichtig>=7) && A.hilfe!=="alleine";
   const igText = encodeURIComponent(`Hey Philip, hab den Check gemacht – mein Typ: ${TYPES[TYPE].name}`);
-  const book = `<div class="card noprint">
-      <h3 style="margin-top:0">Den Plan umsetzen – mit mir an deiner Seite</h3>
-      <p>Der Plan ist dein Start. Ob du ihn im Alltag durchziehst, entscheidet die Umsetzung. Lass uns in einem kostenlosen Gespräch schauen, wie das bei dir konkret aussieht.</p>
-      <a class="btn" href="${CONFIG.calendly}" target="_blank" onclick="send({status:'calendly_klick'})">Kostenloses Erstgespräch buchen</a>
-    </div>`;
-  const ig = `<a class="btn ${hot?"ghost":""} noprint" href="https://ig.me/m/${CONFIG.instagram}?text=${igText}" onclick="copyRes();send({status:'insta_klick'})">Ergebnis an Philip schicken</a>`;
-  return hot ? book + ig : `<div class="card noprint"><h3 style="margin-top:0">Fragen zu deinem Plan?</h3><p>Schick mir dein Ergebnis auf Instagram – ich sag dir, womit du am besten startest.</p>${ig}</div>
-    <a class="btn ghost noprint" style="border:0" href="${CONFIG.calendly}" target="_blank" onclick="send({status:'calendly_klick'})">Oder direkt ein kostenloses Gespräch buchen</a>`;
+  const book = `<a class="btn" href="${CONFIG.calendly}" target="_blank" rel="noopener" onclick="send({status:'calendly_klick'})">Kostenloses Erstgespräch buchen</a>`;
+  const ig = `<a class="btn ghost" href="https://ig.me/m/${CONFIG.instagram}?text=${igText}" onclick="copyRes();send({status:'insta_klick'})">Ergebnis an Philip schicken</a>`;
+  return hot
+   ? `<div class="hero noprint"><h3>Wie geht es jetzt weiter?</h3><h2>Den Plan umsetzen – mit mir an deiner Seite</h2>
+      <p>Der Plan ist dein Start. Ob du ihn im Alltag durchziehst, entscheidet die Umsetzung. Lass uns in einem kostenlosen Gespräch schauen, wie das bei dir konkret aussieht.</p>${book}${ig}</div>`
+   : `<div class="hero noprint"><h3>Wie geht es jetzt weiter?</h3><h2>Fragen zu deinem Plan?</h2>
+      <p>Schick mir dein Ergebnis auf Instagram – ich sag dir, womit du am besten startest.</p>${ig}
+      <a class="btn ghost" href="${CONFIG.calendly}" target="_blank" rel="noopener" onclick="send({status:'calendly_klick'})">Oder direkt ein kostenloses Gespräch buchen</a></div>`;
 }
+
 function copyRes(){
   const txt=`Hey Philip, hab den Check gemacht – mein Typ: ${TYPES[TYPE].name}${P.kcal?` (Plan: ${P.kcal} kcal, ${P.protein} g Protein)`:""}`;
   try{ navigator.clipboard.writeText(txt); }catch(e){}
@@ -457,7 +496,7 @@ function send(extra){
   const data = {sid:SID, zeit:new Date().toISOString(), name:NAME, quelle:SRC, typ:TYPE?TYPES[TYPE].name:"", ...A, ...S,
     geschlecht:P.sex||"", alter:P.age||"", groesse:P.h||"", gewicht:P.w||"", kcal:P.kcal||"", protein:P.protein||"",
     heiss: (A.wichtig>=7 && A.hilfe!=="alleine") ? "JA" : "", ...extra};
-  try{ fetch(CONFIG.endpoint,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain"},body:JSON.stringify(data)}); }catch(e){}
+  try{ fetch(CONFIG.endpoint,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain"},body:JSON.stringify(data)}).catch(()=>{}); }catch(e){}
 }
 
 intro();
