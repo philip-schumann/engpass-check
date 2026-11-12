@@ -5,9 +5,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Dein Fitness-Engpass-Check | Schumann Coaching</title>
 <meta name="description" content="In 2 Minuten herausfinden, was dich bei deinem Ziel ausbremst – inklusive persönlichem Plan.">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Figtree:wght@400;500;600&display=swap">
+<link rel="preload" href="fonts/bricolage-grotesque-latin-800-normal.woff2" as="font" type="font/woff2" crossorigin>
 <style>
+@font-face{font-family:"Figtree";font-style:normal;font-weight:400;font-display:swap;src:url(fonts/figtree-latin-400-normal.woff2) format("woff2")}
+@font-face{font-family:"Figtree";font-style:normal;font-weight:500;font-display:swap;src:url(fonts/figtree-latin-500-normal.woff2) format("woff2")}
+@font-face{font-family:"Figtree";font-style:normal;font-weight:600;font-display:swap;src:url(fonts/figtree-latin-600-normal.woff2) format("woff2")}
+@font-face{font-family:"Bricolage Grotesque";font-style:normal;font-weight:600;font-display:swap;src:url(fonts/bricolage-grotesque-latin-600-normal.woff2) format("woff2")}
+@font-face{font-family:"Bricolage Grotesque";font-style:normal;font-weight:800;font-display:swap;src:url(fonts/bricolage-grotesque-latin-800-normal.woff2) format("woff2")}
+
 :root{
   --bg:#FFFFFF; --surface:#EDF5EE; --ink:#13241A; --muted:#526457; --line:#D3E0D6;
   --accent:#2E8B3D; --accent-ink:#1F6B2D; --btn-bg:#267A34; --btn-fg:#FFFFFF; --warn:#FFF3DC;
@@ -100,17 +105,36 @@ p.cat{font-size:.75rem;font-weight:600;letter-spacing:.06em;text-transform:upper
 footer{border-top:1px solid var(--line);padding-top:16px;font-size:.8125rem;line-height:1.5;color:var(--muted);display:flex;flex-direction:column;gap:6px}
 footer strong{color:var(--ink);font-weight:600}
 footer p{color:var(--muted)}
+.coach{display:flex;gap:14px;align-items:center}
+.ava{width:60px;height:60px;border-radius:50%;object-fit:cover;flex:none;border:3px solid var(--bg);box-shadow:0 0 0 2px var(--accent)}
+.coach b{display:block;font-weight:600;line-height:1.25}
+.coach span{display:block;font-size:.875rem;color:var(--muted);line-height:1.35}
+.hero .coach{border-top:1px solid var(--line);padding-top:16px;margin-top:4px}
+header .mini{width:30px;height:30px;border-radius:50%;object-fit:cover;box-shadow:0 0 0 2px var(--accent)}
+header b:has(.mini):before{display:none}
+.done{display:inline-flex;align-items:center;gap:8px;align-self:flex-start;background:var(--accent);color:#fff;border-radius:999px;padding:6px 14px 6px 8px;font-size:.8125rem;font-weight:600;letter-spacing:.04em;text-transform:uppercase}
+.done:before{content:"\2713";width:20px;height:20px;border-radius:50%;background:#fff;color:var(--accent);display:grid;place-items:center;font-weight:800}
+.preview{position:relative;border:1.5px solid var(--line);border-radius:20px;padding:22px;overflow:hidden}
+.preview .blur{filter:blur(7px);user-select:none;pointer-events:none;display:flex;flex-direction:column;gap:12px}
+.preview .lock{position:absolute;inset:0;display:grid;place-items:center;background:linear-gradient(rgba(255,255,255,.2),rgba(255,255,255,.75))}
+.preview .lock span{background:var(--bg);border:1.5px solid var(--accent);color:var(--accent-ink);font-weight:600;border-radius:999px;padding:8px 16px;font-size:.9375rem}
+.check{display:flex;gap:12px;align-items:flex-start;text-transform:none;letter-spacing:0;font-weight:400;font-size:.875rem;line-height:1.45;color:var(--muted);cursor:pointer}
+.check input{width:22px;height:22px;flex:none;accent-color:var(--accent);margin-top:1px;padding:0}
+.check a{color:var(--accent-ink)}
+.hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+footer a{color:var(--muted)}
 @media print{.noprint,header,.bar,footer{display:none!important}details.rec>*{display:block}}
 </style>
 </head>
 <body>
 <div class="wrap">
-  <header class="noprint"><b>Schumann Coaching</b><span id="count"></span></header>
+  <header class="noprint"><b><img class="mini" src="philip.jpg" alt="">Schumann Coaching</b><span id="count"></span></header>
   <div class="bar noprint"><i id="prog"></i></div>
   <main id="app"></main>
   <footer class="noprint">
     <p><strong>Philip Schumann, Online-Fitnesscoach</strong></p>
     <p>Richtwerte für gesunde Erwachsene, keine medizinische Beratung. Bei Vorerkrankungen sprich bitte vorher mit deinem Arzt.</p>
+    <p><a href="datenschutz.html" target="_blank" rel="noopener">Datenschutz</a> · <a href="datenschutz.html#impressum" target="_blank" rel="noopener">Impressum</a></p>
   </footer>
 </div>
 
@@ -119,12 +143,13 @@ footer p{color:var(--muted)}
 const CONFIG = {
   calendly: "https://calendly.com/philip-schumann/erstgespraech",               // ← Calendly-Link einsetzen
   instagram: "philip.schumann",
+  privacy: "datenschutz.html",
   endpoint: "https://script.google.com/macros/s/AKfycbx4ldHBbSvOb2rb8nrFSTR3ly3HUvXnjXMvi88Fo2dZLbbh7PlWUf3DwKURWVlW5zNh/exec",              // ← Web-App-URL aus Google Apps Script
 };
 /* ======================================================== */
 
 const params = new URLSearchParams(location.search);
-const NAME = (params.get("name") || "").replace(/[^\p{L}\s\-]/gu,"").trim().slice(0,30);
+let NAME = (params.get("name") || "").replace(/[^\p{L}\s\-]/gu,"").trim().slice(0,30);
 const SRC = (params.get("v") || params.get("src") || "").slice(0,20);
 const SID = Date.now().toString(36)+Math.random().toString(36).slice(2,7);
 const A = {}; // Antworten
@@ -201,8 +226,9 @@ function intro(){
     <div class="hero">
       <h3>Fitness-Engpass-Check</h3>
       <h1>${NAME?`Hey ${esc(NAME)}, f`:"F"}inde heraus, was dich gerade wirklich ausbremst.</h1>
-      <p class="lede">14 kurze Fragen, fast nur Klicken. Etwa 3 Minuten, kostenlos und ohne Anmeldung.</p>
+      <p class="lede">14 kurze Fragen, fast nur Klicken. Etwa 3 Minuten und kostenlos.</p>
       <button class="btn" onclick="ask(0)">Check starten</button>
+      <div class="coach"><img class="ava" src="philip.jpg" alt="Philip Schumann"><div><b>Philip Schumann</b><span>Online-Fitnesscoach · Abnehmen, Muskelaufbau & dranbleiben</span></div></div>
     </div>
     <div class="sect">
       <h3>Das bekommst du</h3>
@@ -243,7 +269,61 @@ function textStep(){
 function saveText(){
   A.bedeutung = document.getElementById("t1").value.trim().slice(0,300);
   A.anders = document.getElementById("t2").value.trim().slice(0,300);
+  gate();
+}
+
+/* ---------- Lead-Schritt: Daten gegen Ergebnis ---------- */
+const LEAD = {vorname:"", email:"", telefon:"", einwilligung:""};
+function calcType(){
+  const order=["routine","ernaehrung","kopf","training"]; // bei Gleichstand: Reihenfolge
+  TYPE = order.reduce((a,b)=>S[b]>S[a]?b:a, order[0]);
+}
+function gate(){
+  calcType(); progress(TOTAL);
+  document.getElementById("count").textContent="Auswertung fertig";
+  send({status:"auswertung"});
+  view(`
+    <div class="hero">
+      <span class="done">Auswertung fertig</span>
+      <h2 class="big">${NAME?esc(NAME)+", d":"D"}ein Ergebnis ist da.</h2>
+      <p>Ich habe deine Antworten ausgewertet. Trag dich kurz ein, dann bekommst du sofort:</p>
+      <ul class="perks">
+        <li><span>Deinen <b>Engpass-Typ</b> – was dich wirklich ausbremst</span></li>
+        <li><span>Deinen <b>größten Hebel</b> und deine Aufgabe für die nächsten 7 Tage</span></li>
+        <li><span>Deinen <b>persönlichen Ernährungsplan</b> mit Rezepten und Einkaufsliste</span></li>
+      </ul>
+    </div>
+    <div class="preview" aria-hidden="true">
+      <div class="blur"><h3>Dein Engpass-Typ</h3><h2>${TYPES[TYPE].name}</h2><p>${TYPES[TYPE].text}</p></div>
+      <div class="lock"><span>🔒 Gleich freigeschaltet</span></div>
+    </div>
+    <form class="quiz" onsubmit="return submitLead(event)" novalidate>
+      <h2>Wohin darf ich dir dein Ergebnis schicken?</h2>
+      <div class="field"><label for="l-name">Vorname</label><input id="l-name" autocomplete="given-name" value="${esc(NAME)}" maxlength="30"></div>
+      <div class="field"><label for="l-mail">E-Mail</label><input id="l-mail" type="email" inputmode="email" autocomplete="email" placeholder="name@beispiel.de" maxlength="80"></div>
+      <div class="field"><label for="l-tel">Handynummer <span style="text-transform:none;letter-spacing:0;font-weight:400">(optional)</span></label><input id="l-tel" type="tel" inputmode="tel" autocomplete="tel" placeholder="für Rückfragen zu deinem Plan" maxlength="25"></div>
+      <div class="hp" aria-hidden="true"><label>Website<input id="l-web" tabindex="-1" autocomplete="off"></label></div>
+      <label class="check"><input type="checkbox" id="l-ok"><span>Ich bin einverstanden, dass Philip Schumann meine Angaben (auch zu Körper und Ernährung) speichert und mich per E-Mail oder Telefon zu meinem Ergebnis und seinem Coaching kontaktiert. Widerruf jederzeit möglich. <a href="${CONFIG.privacy}" target="_blank" rel="noopener">Datenschutz</a></span></label>
+      <p class="err" id="l-err" role="alert"></p>
+      <button class="btn" type="submit">Mein Ergebnis anzeigen</button>
+      <p class="small" style="text-align:center">Kein Spam. Nur dein Ergebnis und ehrliche Tipps von mir.</p>
+      <div class="coach"><img class="ava" src="philip.jpg" alt="Philip Schumann"><div><b>Philip Schumann</b><span>Online-Fitnesscoach · ich schau mir dein Ergebnis an</span></div></div>
+      <button class="back" type="button" onclick="textStep()">Zurück</button>
+    </form>`);
+}
+function submitLead(e){
+  e.preventDefault();
+  const v = id => document.getElementById(id).value.trim();
+  const err = document.getElementById("l-err");
+  const name = v("l-name").replace(/[^\p{L}\s\-]/gu,"").slice(0,30), mail = v("l-mail").slice(0,80), tel = v("l-tel").replace(/[^\d+ ]/g,"").slice(0,25);
+  if(name.length<2) return err.textContent="Bitte gib deinen Vornamen ein.", false;
+  if(!/^[^\s@]+@[^\s@]+\.[a-z]{2,}$/i.test(mail)) return err.textContent="Bitte gib eine gültige E-Mail-Adresse ein.", false;
+  if(tel && tel.replace(/\D/g,"").length<6) return err.textContent="Die Handynummer sieht unvollständig aus – oder lass das Feld einfach leer.", false;
+  if(!document.getElementById("l-ok").checked) return err.textContent="Bitte bestätige kurz die Einwilligung, damit ich dir dein Ergebnis zeigen darf.", false;
+  NAME = name;
+  if(!v("l-web")){ Object.assign(LEAD,{vorname:name, email:mail, telefon:tel, einwilligung:new Date().toISOString()+" (Checkbox v1)"}); send({status:"lead"}); }
   result();
+  return false;
 }
 
 function pick(i,k){
@@ -277,14 +357,12 @@ function excluded(){
 
 let TYPE;
 function result(){
-  progress(TOTAL);
-  const order=["routine","ernaehrung","kopf","training"]; // bei Gleichstand: Reihenfolge
-  TYPE = order.reduce((a,b)=>S[b]>S[a]?b:a, order[0]);
+  progress(TOTAL); calcType();
+  const order=["routine","ernaehrung","kopf","training"];
   const t=TYPES[TYPE];
   const lab={ernaehrung:"Ernährung",routine:"Struktur & Planung",training:"Training",kopf:"Dranbleiben"};
   const mx=Math.max(1,...Object.values(S));
   const bars=[...order].sort((a,b)=>S[b]-S[a]).map(k=>`<div class="barrow ${k===TYPE?"top":""}"><span>${lab[k]}</span><div class="track"><div class="fill" style="width:${Math.max(4,Math.round(S[k]/mx*100))}%"></div></div></div>`).join("");
-  send({status:"diagnose"});
   view(`
     <div class="hero">
       <h3>Dein Engpass-Typ</h3>
@@ -609,10 +687,10 @@ function cta(){
   const book = `<a class="btn" href="${CONFIG.calendly}" target="_blank" rel="noopener" onclick="send({status:'calendly_klick'})">Kostenloses Erstgespräch buchen</a>`;
   const ig = `<a class="btn ghost" href="https://ig.me/m/${CONFIG.instagram}?text=${igText}" onclick="copyRes();send({status:'insta_klick'})">Ergebnis an Philip schicken</a>`;
   return hot
-   ? `<div class="hero noprint"><h3>Wie geht es jetzt weiter?</h3><h2>Den Plan umsetzen – mit mir an deiner Seite</h2>
+   ? `<div class="hero noprint"><div class="coach" style="border:0;padding:0;margin:0"><img class="ava" src="philip.jpg" alt="Philip Schumann"><div><b>Philip Schumann</b><span>Dein Coach für die Umsetzung</span></div></div><h3>Wie geht es jetzt weiter?</h3><h2>Den Plan umsetzen – mit mir an deiner Seite</h2>
       ${A.bedeutung?`<div class="quote"><small>Dein Ziel in deinen Worten</small>„${esc(A.bedeutung)}“</div>`:""}
       <p>Der Plan ist dein Start. Ob du ihn im Alltag durchziehst, entscheidet die Umsetzung. Lass uns in einem kostenlosen Gespräch schauen, wie das bei dir konkret aussieht.</p>${book}${ig}</div>`
-   : `<div class="hero noprint"><h3>Wie geht es jetzt weiter?</h3><h2>Fragen zu deinem Plan?</h2>
+   : `<div class="hero noprint"><div class="coach" style="border:0;padding:0;margin:0"><img class="ava" src="philip.jpg" alt="Philip Schumann"><div><b>Philip Schumann</b><span>Online-Fitnesscoach</span></div></div><h3>Wie geht es jetzt weiter?</h3><h2>Fragen zu deinem Plan?</h2>
       <p>Schick mir dein Ergebnis auf Instagram – ich sag dir, womit du am besten startest.</p>${ig}
       <a class="btn ghost" href="${CONFIG.calendly}" target="_blank" rel="noopener" onclick="send({status:'calendly_klick'})">Oder direkt ein kostenloses Gespräch buchen</a></div>`;
 }
@@ -625,7 +703,7 @@ function copyRes(){
 /* ---------- Daten an Google Sheet ---------- */
 function send(extra){
   if(!CONFIG.endpoint.startsWith("http")) return;
-  const data = {sid:SID, zeit:new Date().toISOString(), name:NAME, quelle:SRC, typ:TYPE?TYPES[TYPE].name:"", ...A, ...S,
+  const data = {sid:SID, zeit:new Date().toISOString(), name:NAME, quelle:SRC, email:LEAD.email, telefon:LEAD.telefon, einwilligung:LEAD.einwilligung, typ:TYPE?TYPES[TYPE].name:"", ...A, ...S,
     geschlecht:P.sex||"", alter:P.age||"", groesse:P.h||"", gewicht:P.w||"", kcal:P.kcal||"", protein:P.protein||"",
     heiss: (A.wichtig>=7 && A.hilfe!=="alleine") ? "JA" : "", ...extra};
   try{ fetch(CONFIG.endpoint,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain"},body:JSON.stringify(data)}).catch(()=>{}); }catch(e){}

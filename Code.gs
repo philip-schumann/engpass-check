@@ -1,14 +1,14 @@
 /**
  * Engpass-Check – Backend (Google Apps Script)
  * Eine Zeile pro Lead (über "sid"), wird bei jedem Schritt aktualisiert.
- * E-Mail an Philip, sobald ein Lead seinen Plan hat oder auf Calendly klickt.
+ * E-Mail an Philip bei heißem Lead (nach Eintragen der Kontaktdaten) und bei Calendly-Klick.
  */
 const MAIL_TO = "p.schumann.business@gmail.com";
 const SHEET_NAME = "Leads";
 const SHEET_ID = "1PlRtPbThS2-yVjYgWn9SIMl0NUQoRRBmPKExmnuQ4Qw";
 const COLS = ["sid","zeit","status","name","quelle","heiss","typ","ziel","dauer","probiert","essen","wasessen",
   "training","kipppunkt","planung","warum","wichtig","hilfe","geschlecht","alter","groesse","gewicht","kcal","protein",
-  "ernaehrung","routine","kopf","ausschluss","seit","bedeutung","anders"];
+  "ernaehrung","routine","kopf","ausschluss","seit","bedeutung","anders","email","telefon","einwilligung"];
 
 function doPost(e) {
   const lock = LockService.getScriptLock();
@@ -36,7 +36,7 @@ function doPost(e) {
     const subjectBase = (d.name || "Unbekannt") + " – " + (d.typ || "");
     if (d.status === "calendly_klick" && prevStatus !== "calendly_klick") {
       MailApp.sendEmail(MAIL_TO, "📅 Calendly-Klick: " + subjectBase, summary(d));
-    } else if (d.status === "plan" && d.heiss === "JA") {
+    } else if (d.status === "lead" && d.heiss === "JA" && prevStatus !== "lead") {
       MailApp.sendEmail(MAIL_TO, "🔥 Heißer Lead: " + subjectBase, summary(d));
     }
     return ContentService.createTextOutput("ok");
@@ -47,7 +47,7 @@ function doPost(e) {
 
 function summary(d) {
   return [
-    "Name: " + (d.name || "-"), "Typ: " + d.typ, "Ziel: " + d.ziel,
+    "Name: " + (d.name || "-"), "E-Mail: " + (d.email || "-"), "Telefon: " + (d.telefon || "-"), "Typ: " + d.typ, "Ziel: " + d.ziel,
     "Wichtigkeit (1–10): " + d.wichtig, "Angehen: " + d.hilfe, "Warum jetzt: " + d.warum,
     "Seit wann 'so nicht weiter': " + (d.seit || "-"),
     "Was es bedeuten würde (seine Worte): " + (d.bedeutung || "-"),
