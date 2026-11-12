@@ -176,7 +176,12 @@ const CONFIG = {
 /* ======================================================== */
 
 const params = new URLSearchParams(location.search);
-let NAME = (params.get("name") || "").replace(/[^\p{L}\s\-]/gu,"").trim().slice(0,30);
+// Name aus Link (auch ManyChat-Platzhalter wie {{first_name}}): erstes Wort, nur Buchstaben, groß geschrieben
+let NAME = (()=>{ let n=(params.get("name")||"").trim();
+  if(/[{}]/.test(n)) return "";                        // Platzhalter nicht ersetzt
+  n=n.split(/[\s._\-\d|]+/u).find(w=>/\p{L}{2,}/u.test(w))||"";
+  n=n.replace(/[^\p{L}]/gu,"").slice(0,20);
+  return n.length>=2 ? n.charAt(0).toUpperCase()+n.slice(1).toLowerCase() : ""; })();
 const SRC = (params.get("v") || params.get("src") || "").slice(0,20);
 const SID = Date.now().toString(36)+Math.random().toString(36).slice(2,7);
 const A = {}; // Antworten
