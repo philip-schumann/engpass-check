@@ -3,7 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Dein Fitness-Engpass-Check | Schumann Coaching</title>
+<title>Dein Fitness-Engpass-Check | Schumann Consulting</title>
+<link rel="icon" type="image/png" href="favicon.png">
+<meta name="theme-color" content="#123D22">
 <meta name="description" content="In 2 Minuten herausfinden, was dich bei deinem Ziel ausbremst – inklusive persönlichem Plan.">
 <link rel="preload" href="fonts/bricolage-grotesque-latin-800-normal.woff2" as="font" type="font/woff2" crossorigin>
 <style>
@@ -111,7 +113,7 @@ footer p{color:var(--muted)}
 .coach span{display:block;font-size:.875rem;color:var(--muted);line-height:1.35}
 .hero .coach{border-top:1px solid var(--line);padding-top:16px;margin-top:4px}
 header .mini{width:30px;height:30px;border-radius:50%;object-fit:cover;box-shadow:0 0 0 2px var(--accent)}
-header b:has(.mini):before{display:none}
+header b:has(.logo):before{display:none}
 .done{display:inline-flex;align-items:center;gap:8px;align-self:flex-start;background:var(--accent);color:#fff;border-radius:999px;padding:6px 14px 6px 8px;font-size:.8125rem;font-weight:600;letter-spacing:.04em;text-transform:uppercase}
 .done:before{content:"\2713";width:20px;height:20px;border-radius:50%;background:#fff;color:var(--accent);display:grid;place-items:center;font-weight:800}
 .preview{position:relative;border:1.5px solid var(--line);border-radius:20px;padding:22px;overflow:hidden}
@@ -123,16 +125,41 @@ header b:has(.mini):before{display:none}
 .check a{color:var(--accent-ink)}
 .hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
 footer a{color:var(--muted)}
+.hero.brand{background:radial-gradient(120% 80% at 100% 0%,#A9D33F 0%,rgba(169,211,63,0) 58%),linear-gradient(160deg,#103A20 0%,#1B5A2F 50%,#2E8B3D 100%);color:#fff;position:relative;overflow:hidden}
+.hero.brand>*:not(.wm){position:relative}
+.hero.brand h1,.hero.brand h2,.hero.brand h2.big{color:#fff}
+.hero.brand h3{color:#C9EE6E;letter-spacing:.14em}
+.hero.brand p,.hero.brand .lede,.hero.brand li{color:rgba(255,255,255,.9)}
+.hero.brand b{color:#fff}
+.hero.brand .btn{background:#fff;color:#123D22}
+.hero.brand .btn.ghost{background:transparent;color:#fff;border-color:rgba(255,255,255,.65)}
+.hero.brand .coach{border-color:rgba(255,255,255,.18)}
+.hero.brand .coach span{color:rgba(255,255,255,.75)}
+.hero.brand .ava{border-color:#1B5A2F;box-shadow:0 0 0 2px #C9EE6E}
+.hero.brand .perks li:before{background:#C9EE6E;color:#123D22}
+.hero.brand .quote{background:rgba(255,255,255,.12);border-left-color:#C9EE6E;color:#fff}
+.hero.brand .quote small{color:rgba(255,255,255,.7)}
+.hero.brand .done{background:#C9EE6E;color:#123D22}
+.hero.brand .done:before{background:#123D22;color:#C9EE6E}
+.wm{position:absolute;right:-36px;bottom:-40px;width:200px;opacity:.08;pointer-events:none}
+.portrait{position:relative;border-radius:16px;overflow:hidden;aspect-ratio:5/4}
+.portrait img{width:100%;height:100%;object-fit:cover;object-position:50% 18%;display:block}
+.portrait .tag{position:absolute;left:12px;bottom:12px;right:12px;display:flex;align-items:center;gap:10px;background:rgba(16,58,32,.82);backdrop-filter:blur(6px);color:#fff;border-radius:12px;padding:10px 12px;font-size:.875rem;line-height:1.3}
+.portrait .tag img{width:26px;height:auto}
+.portrait .tag b{display:block;font-weight:600}
+.portrait .tag span{color:rgba(255,255,255,.78);font-size:.8125rem}
+header .logo{width:26px;height:auto}
+.flogo{width:28px;height:auto;margin-bottom:4px}
 @media print{.noprint,header,.bar,footer{display:none!important}details.rec>*{display:block}}
 </style>
 </head>
 <body>
 <div class="wrap">
-  <header class="noprint"><b><img class="mini" src="philip.jpg" alt="">Schumann Coaching</b><span id="count"></span></header>
+  <header class="noprint"><b><img class="logo" src="logo-gruen.png" alt="">Schumann Consulting</b><span id="count"></span></header>
   <div class="bar noprint"><i id="prog"></i></div>
   <main id="app"></main>
   <footer class="noprint">
-    <p><strong>Philip Schumann, Online-Fitnesscoach</strong></p>
+    <img class="flogo" src="logo-gruen.png" alt=""><p><strong>Philip Schumann · Schumann Consulting</strong></p>
     <p>Richtwerte für gesunde Erwachsene, keine medizinische Beratung. Bei Vorerkrankungen sprich bitte vorher mit deinem Arzt.</p>
     <p><a href="datenschutz.html" target="_blank" rel="noopener">Datenschutz</a> · <a href="datenschutz.html#impressum" target="_blank" rel="noopener">Impressum</a></p>
   </footer>
@@ -223,12 +250,13 @@ function view(html){ app.innerHTML = `<div class="step">${html}</div>`; window.s
 function intro(){
   progress(0);
   view(`
-    <div class="hero">
+    <div class="hero brand">
+      <img class="wm" src="logo-weiss.png" alt="">
+      <div class="portrait"><img src="philip-hero.jpg" alt="Philip Schumann"><div class="tag"><img src="logo-weiss.png" alt=""><div><b>Philip Schumann</b><span>Online-Fitnesscoach · individuelle Fitnessberatung</span></div></div></div>
       <h3>Fitness-Engpass-Check</h3>
       <h1>${NAME?`Hey ${esc(NAME)}, f`:"F"}inde heraus, was dich gerade wirklich ausbremst.</h1>
       <p class="lede">14 kurze Fragen, fast nur Klicken. Etwa 3 Minuten und kostenlos.</p>
       <button class="btn" onclick="ask(0)">Check starten</button>
-      <div class="coach"><img class="ava" src="philip.jpg" alt="Philip Schumann"><div><b>Philip Schumann</b><span>Online-Fitnesscoach · Abnehmen, Muskelaufbau & dranbleiben</span></div></div>
     </div>
     <div class="sect">
       <h3>Das bekommst du</h3>
@@ -283,7 +311,8 @@ function gate(){
   document.getElementById("count").textContent="Auswertung fertig";
   send({status:"auswertung"});
   view(`
-    <div class="hero">
+    <div class="hero brand">
+      <img class="wm" src="logo-weiss.png" alt="">
       <span class="done">Auswertung fertig</span>
       <h2 class="big">${NAME?esc(NAME)+", d":"D"}ein Ergebnis ist da.</h2>
       <p>Ich habe deine Antworten ausgewertet. Trag dich kurz ein, dann bekommst du sofort:</p>
@@ -358,13 +387,15 @@ function excluded(){
 let TYPE;
 function result(){
   progress(TOTAL); calcType();
+  document.getElementById("count").textContent="Dein Ergebnis";
   const order=["routine","ernaehrung","kopf","training"];
   const t=TYPES[TYPE];
   const lab={ernaehrung:"Ernährung",routine:"Struktur & Planung",training:"Training",kopf:"Dranbleiben"};
   const mx=Math.max(1,...Object.values(S));
   const bars=[...order].sort((a,b)=>S[b]-S[a]).map(k=>`<div class="barrow ${k===TYPE?"top":""}"><span>${lab[k]}</span><div class="track"><div class="fill" style="width:${Math.max(4,Math.round(S[k]/mx*100))}%"></div></div></div>`).join("");
   view(`
-    <div class="hero">
+    <div class="hero brand">
+      <img class="wm" src="logo-weiss.png" alt="">
       <h3>Dein Engpass-Typ</h3>
       <h2 class="big">${t.name}</h2>
       <p>${t.text}</p>
@@ -376,7 +407,7 @@ function result(){
     <div class="hero">
       <h3>Dein nächster Schritt</h3>
       <h2>Willst du deinen Ernährungsplan dazu?</h2>
-      <p>Mit 4 Angaben rechne ich dir Kalorien und Protein aus und baue dir einen <b>Rezeptplan mit Einkaufsliste</b> und Wochenstruktur – passend zu deinem Engpass.</p>
+      <p>Mit 5 Angaben rechne ich dir Kalorien und Protein aus und baue dir einen <b>Rezeptplan mit Einkaufsliste</b> und Wochenstruktur – passend zu deinem Engpass.</p>
       <button class="btn" onclick="planForm()">Ja, Rezeptplan erstellen</button>
     </div>`);
 }
@@ -687,10 +718,10 @@ function cta(){
   const book = `<a class="btn" href="${CONFIG.calendly}" target="_blank" rel="noopener" onclick="send({status:'calendly_klick'})">Kostenloses Erstgespräch buchen</a>`;
   const ig = `<a class="btn ghost" href="https://ig.me/m/${CONFIG.instagram}?text=${igText}" onclick="copyRes();send({status:'insta_klick'})">Ergebnis an Philip schicken</a>`;
   return hot
-   ? `<div class="hero noprint"><div class="coach" style="border:0;padding:0;margin:0"><img class="ava" src="philip.jpg" alt="Philip Schumann"><div><b>Philip Schumann</b><span>Dein Coach für die Umsetzung</span></div></div><h3>Wie geht es jetzt weiter?</h3><h2>Den Plan umsetzen – mit mir an deiner Seite</h2>
+   ? `<div class="hero brand noprint"><img class="wm" src="logo-weiss.png" alt=""><div class="coach" style="border:0;padding:0;margin:0"><img class="ava" src="philip.jpg" alt="Philip Schumann"><div><b>Philip Schumann</b><span>Dein Coach für die Umsetzung</span></div></div><h3>Wie geht es jetzt weiter?</h3><h2>Den Plan umsetzen – mit mir an deiner Seite</h2>
       ${A.bedeutung?`<div class="quote"><small>Dein Ziel in deinen Worten</small>„${esc(A.bedeutung)}“</div>`:""}
       <p>Der Plan ist dein Start. Ob du ihn im Alltag durchziehst, entscheidet die Umsetzung. Lass uns in einem kostenlosen Gespräch schauen, wie das bei dir konkret aussieht.</p>${book}${ig}</div>`
-   : `<div class="hero noprint"><div class="coach" style="border:0;padding:0;margin:0"><img class="ava" src="philip.jpg" alt="Philip Schumann"><div><b>Philip Schumann</b><span>Online-Fitnesscoach</span></div></div><h3>Wie geht es jetzt weiter?</h3><h2>Fragen zu deinem Plan?</h2>
+   : `<div class="hero brand noprint"><img class="wm" src="logo-weiss.png" alt=""><div class="coach" style="border:0;padding:0;margin:0"><img class="ava" src="philip.jpg" alt="Philip Schumann"><div><b>Philip Schumann</b><span>Online-Fitnesscoach</span></div></div><h3>Wie geht es jetzt weiter?</h3><h2>Fragen zu deinem Plan?</h2>
       <p>Schick mir dein Ergebnis auf Instagram – ich sag dir, womit du am besten startest.</p>${ig}
       <a class="btn ghost" href="${CONFIG.calendly}" target="_blank" rel="noopener" onclick="send({status:'calendly_klick'})">Oder direkt ein kostenloses Gespräch buchen</a></div>`;
 }
