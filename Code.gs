@@ -78,6 +78,9 @@ function doPost(e) {
     const subjectBase = (d.name || "Unbekannt") + " – " + (d.typ || "");
     if (d.status === "calendly_klick" && prev.status !== "calendly_klick") {
       MailApp.sendEmail(MAIL_TO, "📅 Calendly-Klick: " + subjectBase, summary(d));
+    } else if (d.status === "insta_klick" && prev.status !== "insta_klick") {
+      MailApp.sendEmail(MAIL_TO, "📩 Ergebnis an dich geschickt: " + subjectBase,
+        "Der Lead hat auf „Ergebnis an Philip schicken“ getippt. Instagram mit vorausgefülltem Text wurde geöffnet – falls keine DM ankommt, schreib ihn/sie direkt an.\n\n" + summary(d));
     } else if (d.status === "lead" && d.heiss === "JA" && prev.status !== "lead") {
       MailApp.sendEmail(MAIL_TO, "🔥 Heißer Lead: " + subjectBase, summary(d));
     }

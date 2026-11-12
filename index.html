@@ -81,6 +81,10 @@ h4{font-weight:600;font-size:1.375rem;line-height:1.2;margin:22px 0 0}
 label{display:block;font-size:.8125rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
 input,select,textarea{width:100%;font:inherit;font-size:1.0625rem;color:var(--ink);background:var(--bg);border:1.5px solid var(--line);border-radius:12px;padding:13px 14px}
 input:focus-visible,select:focus-visible{outline:3px solid var(--accent);outline-offset:1px;border-color:var(--accent)}
+.sent-ov{position:fixed;inset:0;background:rgba(16,58,32,.55);display:grid;place-items:center;z-index:50;padding:16px}
+.sent-box{background:#fff;border-radius:20px;padding:28px 24px;text-align:center;max-width:340px;display:flex;flex-direction:column;gap:10px;align-items:center;font-size:1.0625rem}
+.sent-box p{color:var(--muted)}
+.sent-ok{width:64px;height:64px;border-radius:50%;background:var(--accent);color:#fff;font-size:2rem;display:grid;place-items:center;font-weight:800}
 .opt.sonst{border-style:dashed;color:var(--muted)}
 .sonst-box{display:flex;flex-direction:column;gap:10px}
 .sonst-box input{width:100%}
@@ -435,6 +439,7 @@ function result(){
       <h2>Willst du deinen Ernährungsplan dazu?</h2>
       <p>Mit 5 Angaben rechne ich dir Kalorien und Protein aus und baue dir einen <b>Rezeptplan mit Einkaufsliste</b> und Wochenstruktur – passend zu deinem Engpass.</p>
       <button class="btn" onclick="planForm()">Ja, Rezeptplan erstellen</button>
+      <a class="back" style="text-align:center" href="${igUrl()}" onclick="return toPhilip(event)">Oder: Ergebnis direkt an Philip schicken</a>
     </div>`);
 }
 
@@ -746,9 +751,9 @@ function renderPlan(){
 
 function cta(){
   const hot = (A.wichtig>=7) && A.hilfe!=="alleine";
-  const igText = encodeURIComponent(`Hey Philip, hab den Check gemacht – mein Typ: ${TYPES[TYPE].name}`);
+
   const book = `<a class="btn" href="${CONFIG.calendly}" target="_blank" rel="noopener" onclick="send({status:'calendly_klick'})">Kostenloses Erstgespräch buchen</a>`;
-  const ig = `<a class="btn ghost" href="https://ig.me/m/${CONFIG.instagram}?text=${igText}" onclick="copyRes();send({status:'insta_klick'})">Ergebnis an Philip schicken</a>`;
+  const ig = `<a class="btn ghost" href="${igUrl()}" onclick="return toPhilip(event)">Ergebnis an Philip schicken</a>`;
   return hot
    ? `<div class="hero brand noprint"><img class="wm" src="logo-weiss.png" alt=""><div class="coach" style="border:0;padding:0;margin:0"><img class="ava" src="philip.jpg" alt="Philip Schumann"><div><b>Philip Schumann</b><span>Dein Coach für die Umsetzung</span></div></div><h3>Wie geht es jetzt weiter?</h3><h2>Den Plan umsetzen – mit mir an deiner Seite</h2>
       ${A.bedeutung?`<div class="quote"><small>Dein Ziel in deinen Worten</small>„${esc(A.bedeutung)}“</div>`:""}
@@ -758,11 +763,27 @@ function cta(){
       <a class="btn ghost" href="${CONFIG.calendly}" target="_blank" rel="noopener" onclick="send({status:'calendly_klick'})">Oder direkt ein kostenloses Gespräch buchen</a></div>`;
 }
 
-function copyRes(){
-  const txt=`Hey Philip, hab den Check gemacht – mein Typ: ${TYPES[TYPE].name}${P.kcal?` (Plan: ${P.kcal} kcal, ${P.protein} g Protein)`:""}`;
-  try{ navigator.clipboard.writeText(txt); }catch(e){}
+const ZIEL_TXT={abnehmen:"Abnehmen",muskeln:"Muskeln aufbauen",straffer:"Straffer werden",zunehmen:"Gesund zunehmen",fit:"Wieder fit werden"};
+function resText(){
+  return `Hey Philip 👋 hab gerade deinen Fitness-Engpass-Check gemacht! Mein Typ: ${TYPES[TYPE].name}`
+    + (ZIEL_TXT[A.ziel]?`. Mein Ziel: ${ZIEL_TXT[A.ziel]}`:"")
+    + (P.kcal?`. Mein Plan: ${P.kcal} kcal und ${P.protein} g Protein`:"")
+    + `. Wie starte ich am besten?`;
 }
-
+function igUrl(){ return `https://ig.me/m/${CONFIG.instagram}?text=${encodeURIComponent(resText())}`; }
+function copyRes(){ try{ navigator.clipboard.writeText(resText()); }catch(e){} }
+/* Ein Tipp: Philip bekommt das Ergebnis sofort (Mail), Text ist vorausgefüllt + kopiert, Instagram öffnet sich */
+function toPhilip(e){
+  if(e) e.preventDefault();
+  copyRes(); send({status:"insta_klick"});
+  const o=document.createElement("div"); o.className="sent-ov";
+  o.innerHTML=`<div class="sent-box"><div class="sent-ok">✓</div><b>Ist bei Philip angekommen!</b>
+    <p>Gleich öffnet sich Instagram – dein Text ist schon drin.<br>Einfach nur auf <b>Senden</b> drücken.</p></div>`;
+  document.body.appendChild(o);
+  setTimeout(()=>{ location.href=igUrl(); }, 1600);
+  setTimeout(()=>o.remove(), 6000);
+  return false;
+}
 /* ---------- Daten an Google Sheet ---------- */
 function send(extra){
   if(!CONFIG.endpoint.startsWith("http")) return;
