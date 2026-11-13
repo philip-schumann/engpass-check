@@ -57,7 +57,7 @@
 </div>
 
 <script>
-const ENDPOINT = "APPS_SCRIPT_URL"; // ← Web-App-URL des Freebie-Backends
+const ENDPOINT = "https://script.google.com/macros/s/AKfycbzi4E3XykD9T5a9UvUA9vFrCjR3i4qxN4HS1q0QP5oTxoQz5lNAKvwQUjfsfTQmsklt/exec"; // ← Web-App-URL des Freebie-Backends
 const $ = id => document.getElementById(id);
 const qs = new URLSearchParams(location.search);
 const SRC = [qs.get("utm_source"), qs.get("utm_campaign"), qs.get("utm_content")].filter(Boolean).join(" / ") || "direkt";
