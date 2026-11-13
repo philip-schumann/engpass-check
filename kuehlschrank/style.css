@@ -44,3 +44,29 @@ footer a,.chk a{color:var(--accent-ink)}
 #cookie button{flex:1;font:inherit;font-weight:600;padding:12px;border-radius:10px;cursor:pointer;border:1.5px solid var(--accent);background:#fff;color:var(--accent-ink)}
 #cookie button[data-v=yes]{background:var(--btn);color:#fff;border-color:var(--btn)}
 @media (max-width:420px){.hero{grid-template-columns:1fr 34%}}
+/* ---- Premium-Bausteine ---- */
+.top{background:#123D22;color:#fff;margin:-22px -16px 0;padding:22px 16px 34px;border-radius:0 0 28px 28px;display:flex;flex-direction:column;gap:18px;position:relative;overflow:visible}
+.top header{color:#C9EEcf}
+.top header img{filter:none}
+.top h1{color:#fff}
+.top h1 span{color:#9BE0A6;font-family:Georgia,"Times New Roman",serif;font-style:italic;font-weight:600}
+.top .lede{color:#D6E8DA}
+.badge{align-self:flex-start;background:#2E8B3D;color:#fff;font-weight:600;font-size:.75rem;letter-spacing:.12em;text-transform:uppercase;border-radius:99px;padding:6px 12px}
+.mock{perspective:900px;display:flex;justify-content:center;margin:6px 0 -60px}
+.mock img{width:58%;max-width:230px;height:auto;border-radius:10px;transform:rotateY(-16deg) rotateX(6deg) rotate(2deg);box-shadow:-14px 18px 0 -4px #2E8B3D,0 30px 50px rgba(0,0,0,.35)}
+.after-mock{margin-top:70px}
+.btn.big{font-size:1.125rem;padding:19px}
+.card{border:1.5px solid var(--line);border-radius:18px;padding:20px 18px;display:flex;flex-direction:column;gap:14px;background:#fff}
+.card.dark{background:#123D22;border-color:#123D22;color:#fff}
+.card.dark h2{color:#fff}
+.card.dark p{color:#D6E8DA}
+.card.dark .steps li:before{background:#9BE0A6;color:#123D22}
+.card.dark .btn{background:#fff;color:#123D22;box-shadow:0 5px 0 #0B2715}
+.person{display:flex;gap:14px;align-items:center}
+.person img{width:58px;height:58px;border-radius:50%;object-fit:cover;object-position:50% 20%;border:2px solid #9BE0A6}
+.person b{display:block}
+.person span{font-size:.875rem;color:#B9D3BF}
+.check{display:flex;gap:10px;align-items:center;color:var(--accent-ink);font-weight:600}
+.check:before{content:"✓";width:26px;height:26px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-size:.85rem;flex:none}
+.mailbox{display:flex;gap:10px;flex-wrap:wrap}
+.mailbox a{flex:1;min-width:120px;text-align:center;border:1.5px solid var(--line);border-radius:12px;padding:12px;color:var(--ink);text-decoration:none;font-weight:600;font-size:.9375rem;background:#fff}

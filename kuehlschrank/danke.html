@@ -12,26 +12,31 @@
 </head>
 <body>
 <div class="wrap">
-  <header><img src="../logo-gruen.png" alt="">Schumann Consulting</header>
+  <section class="top">
+    <header><img src="../logo-weiss.png" alt="">Schumann Consulting</header>
+    <span class="badge">Schritt 2 von 2</span>
+    <h1 id="hi">Fast <span>geschafft!</span></h1>
+    <p class="lede">Ich habe dir gerade eine Mail geschickt. Ein Klick darin, dann ist dein Guide da.</p>
+  </section>
 
-  <h1 id="hi">Fast geschafft!</h1>
-  <div class="box">
-    <h2>So bekommst du deinen Guide</h2>
+  <div class="card">
     <ol class="steps">
-      <li>Öffne dein E-Mail-Postfach (schau auch im Spam- oder Werbung-Ordner nach).</li>
+      <li>Öffne dein Postfach – schau auch bei <strong>Spam</strong> oder <strong>Werbung</strong>.</li>
       <li>Klick in meiner Mail auf <strong>„Ja, Guide schicken“</strong>.</li>
-      <li>Direkt danach kannst du die Kühlschrank-Methode herunterladen.</li>
+      <li>Fertig – die Kühlschrank-Methode öffnet sich direkt.</li>
     </ol>
+    <div class="mailbox">
+      <a href="https://mail.google.com/mail/u/0/#search/from%3Ap.schumann.business%40gmail.com" target="_blank" rel="noopener">Gmail öffnen</a>
+      <a href="https://outlook.live.com/mail/0/" target="_blank" rel="noopener">Outlook öffnen</a>
+      <a href="https://web.de/" target="_blank" rel="noopener">WEB.DE / GMX</a>
+    </div>
   </div>
 
-  <h2>Willst du nicht nur den Kühlschrank, sondern das ganze Thema lösen?</h2>
-  <p>Der Kühlschrank ist ein Hebel. Bei den meisten Frauen, mit denen ich arbeite, hängt es zusätzlich am Abend, am Wochenende oder am „heute ist eh alles kaputt“. Im kostenlosen Erstgespräch schauen wir uns an, wo es bei dir hakt, und du gehst mit einem klaren nächsten Schritt raus – egal, ob wir danach zusammenarbeiten.</p>
-  <a class="btn" id="cal" href="https://calendly.com/philip-schumann/erstgespraech?utm_source=freebie&utm_medium=danke&utm_campaign=kuehlschrank" target="_blank" rel="noopener">Kostenloses Erstgespräch buchen →</a>
-  <p class="small">Die Termine sind begrenzt, weil ich jedes Gespräch selbst führe.</p>
-
-  <div class="me">
-    <img src="../philip.jpg" alt="Philip Schumann">
-    <p class="small"><strong style="color:var(--ink)">Philip Schumann</strong><br>Online-Fitnesscoach · <a href="https://instagram.com/philip.schumann" target="_blank" rel="noopener" style="color:var(--accent-ink)">@philip.schumann</a></p>
+  <div class="card dark">
+    <div class="person"><img src="../philip.jpg" alt="Philip Schumann"><div><b>Philip Schumann</b><span>Online-Fitnesscoach · Coburg</span></div></div>
+    <h2>Während du wartest: Lass uns kurz sprechen.</h2>
+    <p>Der Kühlschrank ist ein Hebel. Bei den meisten Frauen, mit denen ich arbeite, hängt es zusätzlich am Abend, am Wochenende oder am „heute ist eh alles kaputt“. Im kostenlosen Erstgespräch finden wir heraus, wo es bei dir hakt – und du gehst mit einem klaren nächsten Schritt raus, egal ob wir danach zusammenarbeiten.</p>
+    <a class="btn big" id="cal" href="https://calendly.com/philip-schumann/erstgespraech?utm_source=freebie&utm_medium=danke&utm_campaign=kuehlschrank" target="_blank" rel="noopener">Kostenloses Erstgespräch buchen →</a>
   </div>
 
   <footer>
@@ -39,8 +44,8 @@
   </footer>
 </div>
 <script>
-const n = new URLSearchParams(location.search).get("n");
-if (n) document.getElementById("hi").textContent = "Fast geschafft, " + n.replace(/[^\p{L}\- ]/gu, "").slice(0, 20) + "!";
+const n = (new URLSearchParams(location.search).get("n") || "").replace(/[^\p{L}\- ]/gu, "").slice(0, 20);
+if (n) document.getElementById("hi").innerHTML = "Fast geschafft, <span>" + n + "!</span>";
 document.getElementById("cal").addEventListener("click", () => scTrack("Contact", {content_name: "Calendly Danke-Seite"}));
 </script>
 </body>

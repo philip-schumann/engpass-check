@@ -10,6 +10,7 @@ const MAIL_TO = "p.schumann.business@gmail.com";
 const SENDER = "Philip Schumann";
 const BASE = "https://philip-schumann.github.io/engpass-check/kuehlschrank/";
 const PDF = BASE + "Kuehlschrank-Methode.pdf";
+const PAGE_OK = BASE + "bestaetigt.html";
 const CAL = "https://calendly.com/philip-schumann/erstgespraech?utm_source=freebie&utm_medium=mail&utm_campaign=kuehlschrank";
 const COLS = ["token","angemeldet","status","name","email","telefon","telefon_ohne_einwilligung","quelle",
   "einwilligung_mail","einwilligung_tel","bestaetigt","nurture_schritt","letzte_mail","abgemeldet"];
@@ -35,6 +36,7 @@ function doPost(e) {
   const lock = LockService.getScriptLock(); lock.waitLock(10000);
   try {
     const d = JSON.parse(e.postData.contents);
+    if (d.a === "confirm" || d.a === "unsub") return out(handleToken(d.a, String(d.t || "")));
     if (d.a !== "signup") return out("ok");
     const email = String(d.email || "").trim().toLowerCase();
     if (!/^[^\s@<>"]+@[^\s@<>"]+\.[a-z]{2,}$/i.test(email) || email.length > 80) return out("bad");
@@ -58,38 +60,36 @@ function doPost(e) {
   } finally { lock.releaseLock(); }
 }
 
-/* ---------- Bestätigen / Abmelden ---------- */
-function doGet(e) {
-  const a = e.parameter.a, t = e.parameter.t;
-  if (!t) return page("Hoppla", "<p>Dieser Link ist unvollständig.</p>");
+/* ---------- Bestätigen / Abmelden (aufgerufen von bestaetigt.html / abmelden.html) ---------- */
+function handleToken(a, t) {
+  if (!t) return "bad";
   const {sh, v} = rows();
   for (let r = 1; r < v.length; r++) if (v[r][col("token")] === t) {
-    const name = v[r][col("name")], email = v[r][col("email")];
     if (a === "unsub") {
       sh.getRange(r + 1, col("status") + 1).setValue("abgemeldet");
       sh.getRange(r + 1, col("abgemeldet") + 1).setValue(new Date());
-      return page("Du bist abgemeldet", "<p>Du bekommst keine weiteren E-Mails mehr von mir. Alles Gute, " + h(name) + "!</p>");
+      return "unsub";
     }
-    if (a === "confirm") {
-      if (!v[r][col("bestaetigt")]) {
-        sh.getRange(r + 1, col("status") + 1).setValue("bestätigt");
-        sh.getRange(r + 1, col("bestaetigt") + 1).setValue(new Date());
-        sendGuide(name, email, t);
-      }
-      return page("Bestätigt – hier ist dein Guide, " + h(name) + "!",
-        "<p>Danke! Den Guide habe ich dir zusätzlich per Mail geschickt.</p>" +
-        btn(PDF, "Kühlschrank-Methode herunterladen") +
-        "<h2 style='margin-top:28px'>Und wenn du willst, dass es diesmal wirklich klappt</h2>" +
-        "<p>Im kostenlosen Erstgespräch schauen wir uns an, wo es bei dir hakt, und du gehst mit einem klaren nächsten Schritt raus.</p>" +
-        btn(CAL, "Kostenloses Erstgespräch buchen", true));
+    if (!v[r][col("bestaetigt")] && !v[r][col("abgemeldet")]) {
+      sh.getRange(r + 1, col("status") + 1).setValue("bestätigt");
+      sh.getRange(r + 1, col("bestaetigt") + 1).setValue(new Date());
+      sendGuide(v[r][col("name")], v[r][col("email")], t);
     }
+    return "confirmed";
   }
-  return page("Link nicht gefunden", "<p>Dieser Link ist abgelaufen oder ungültig. Schreib mir einfach an " + MAIL_TO + ".</p>");
+  return "notfound";
+}
+// Alte Links aus bereits verschickten Mails: weiterleiten auf die gestalteten Seiten
+function doGet(e) {
+  const a = e.parameter.a, t = e.parameter.t || "";
+  if (a === "confirm" || a === "unsub") handleToken(a, t);
+  const url = BASE + (a === "unsub" ? "abmelden.html" : "bestaetigt.html");
+  return HtmlService.createHtmlOutput("<p style='font-family:Arial;padding:24px'><a target='_top' href='" + url + "'>Weiter →</a></p>");
 }
 
 /* ---------- Mails ---------- */
 function sendConfirm(name, email, token) {
-  const link = ScriptApp.getService().getUrl() + "?a=confirm&t=" + token;
+  const link = BASE + "bestaetigt.html?t=" + token + "&n=" + encodeURIComponent(name);
   mail(email, "Bitte kurz bestätigen – dann kommt dein Guide",
     "<p>Hi " + h(name) + ",</p><p>danke für dein Interesse an der Kühlschrank-Methode! Klick einmal auf den Button, dann schicke ich dir den Guide sofort.</p>" +
     btn(link, "Ja, Guide schicken") +
@@ -152,10 +152,21 @@ function nurture() {
 
 /* ---------- Helfer ---------- */
 function mail(to, subject, inner, token) {
-  const unsub = token ? "<p style='font-size:12px;color:#8a9a90;margin-top:28px'>Du bekommst diese Mail, weil du die Kühlschrank-Methode angefordert hast. <a style='color:#8a9a90' href='" +
-    ScriptApp.getService().getUrl() + "?a=unsub&t=" + token + "'>Abmelden</a> · Philip Schumann, Judengasse 43, 96450 Coburg</p>" : "";
-  MailApp.sendEmail({to, subject, name: SENDER, replyTo: MAIL_TO,
-    htmlBody: "<div style='font-family:Arial,sans-serif;font-size:16px;line-height:1.55;color:#13241A;max-width:560px'>" + inner + unsub + "</div>"});
+  const unsub = token ? "Du bekommst diese Mail, weil du die Kühlschrank-Methode angefordert hast. <a style='color:#8FA597' href='" +
+    BASE + "abmelden.html?t=" + token + "'>Abmelden</a><br>" : "";
+  const html =
+    "<div style='background:#EDF5EE;padding:24px 12px;font-family:Helvetica,Arial,sans-serif'>" +
+    "<div style='max-width:560px;margin:0 auto'>" +
+    "<div style='background:#123D22;border-radius:16px 16px 0 0;padding:20px 26px'>" +
+    "<img src='https://philip-schumann.github.io/engpass-check/logo-weiss.png' width='26' style='vertical-align:middle' alt=''>" +
+    "<span style='color:#C9EECF;font-size:12px;font-weight:bold;letter-spacing:2px;text-transform:uppercase;vertical-align:middle;margin-left:10px'>Schumann Consulting</span></div>" +
+    "<div style='background:#ffffff;border-radius:0 0 16px 16px;padding:28px 26px;font-size:16px;line-height:1.6;color:#13241A'>" + inner +
+    "<table role='presentation' style='margin-top:26px;border-top:1px solid #D3E0D6;padding-top:18px;width:100%'><tr>" +
+    "<td width='56'><img src='" + "https://philip-schumann.github.io/engpass-check/philip.jpg' width='48' height='48' style='border-radius:50%;border:2px solid #2E8B3D;object-fit:cover' alt=''></td>" +
+    "<td style='font-size:14px;color:#526457'><b style='color:#13241A'>Philip Schumann</b><br>Online-Fitnesscoach · @philip.schumann</td></tr></table></div>" +
+    "<p style='font-size:12px;color:#8FA597;text-align:center;margin:16px 8px 0;line-height:1.5'>" + unsub + "Philip Schumann · Schumann Consulting · Judengasse 43, 96450 Coburg</p>" +
+    "</div></div>";
+  MailApp.sendEmail({to, subject, name: SENDER, replyTo: MAIL_TO, htmlBody: html});
 }
 function btn(href, label, ghost) {
   return "<p style='margin:22px 0'><a target='_blank' href='" + href + "' style='display:inline-block;background:" + (ghost ? "#fff" : "#267A34") + ";color:" + (ghost ? "#1F6B2D" : "#fff") +
