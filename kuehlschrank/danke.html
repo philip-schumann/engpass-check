@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Fast geschafft – Kühlschrank-Methode | Schumann Consulting</title>
+<meta name="robots" content="noindex">
+<link rel="icon" type="image/png" href="../favicon.png">
+<link rel="stylesheet" href="style.css">
+<script src="consent.js"></script>
+<script>scTrack("Lead", {content_name: "Kuehlschrank-Methode"});</script>
+</head>
+<body>
+<div class="wrap">
+  <header><img src="../logo-gruen.png" alt="">Schumann Consulting</header>
+
+  <h1 id="hi">Fast geschafft!</h1>
+  <div class="box">
+    <h2>So bekommst du deinen Guide</h2>
+    <ol class="steps">
+      <li>Öffne dein E-Mail-Postfach (schau auch im Spam- oder Werbung-Ordner nach).</li>
+      <li>Klick in meiner Mail auf <strong>„Ja, Guide schicken“</strong>.</li>
+      <li>Direkt danach kannst du die Kühlschrank-Methode herunterladen.</li>
+    </ol>
+  </div>
+
+  <h2>Willst du nicht nur den Kühlschrank, sondern das ganze Thema lösen?</h2>
+  <p>Der Kühlschrank ist ein Hebel. Bei den meisten Frauen, mit denen ich arbeite, hängt es zusätzlich am Abend, am Wochenende oder am „heute ist eh alles kaputt“. Im kostenlosen Erstgespräch schauen wir uns an, wo es bei dir hakt, und du gehst mit einem klaren nächsten Schritt raus – egal, ob wir danach zusammenarbeiten.</p>
+  <a class="btn" id="cal" href="https://calendly.com/philip-schumann/erstgespraech?utm_source=freebie&utm_medium=danke&utm_campaign=kuehlschrank" target="_blank" rel="noopener">Kostenloses Erstgespräch buchen →</a>
+  <p class="small">Die Termine sind begrenzt, weil ich jedes Gespräch selbst führe.</p>
+
+  <div class="me">
+    <img src="../philip.jpg" alt="Philip Schumann">
+    <p class="small"><strong style="color:var(--ink)">Philip Schumann</strong><br>Online-Fitnesscoach · <a href="https://instagram.com/philip.schumann" target="_blank" rel="noopener" style="color:var(--accent-ink)">@philip.schumann</a></p>
+  </div>
+
+  <footer>
+    <p><a href="datenschutz.html">Datenschutz</a> · <a href="datenschutz.html#impressum">Impressum</a> · <a href="#" onclick="scResetConsent();return false">Cookie-Einstellungen</a></p>
+  </footer>
+</div>
+<script>
+const n = new URLSearchParams(location.search).get("n");
+if (n) document.getElementById("hi").textContent = "Fast geschafft, " + n.replace(/[^\p{L}\- ]/gu, "").slice(0, 20) + "!";
+document.getElementById("cal").addEventListener("click", () => scTrack("Contact", {content_name: "Calendly Danke-Seite"}));
+</script>
+</body>
+</html>
