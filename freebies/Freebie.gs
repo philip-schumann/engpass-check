@@ -8,7 +8,10 @@ const MAIL_TO = "p.schumann.business@gmail.com";
 const SENDER = "Philip Schumann";
 const ROOT = "https://philip-schumann.github.io/engpass-check/";
 const COLS = ["token","angemeldet","status","name","email","telefon","telefon_ohne_einwilligung","quelle",
-  "einwilligung_mail","einwilligung_tel","bestaetigt","nurture_schritt","letzte_mail","abgemeldet","freebie"];
+  "einwilligung_mail","einwilligung_tel","bestaetigt","nurture_schritt","letzte_mail","abgemeldet","freebie",
+  "crm_status","versuche","letzter_kontakt","naechster_schritt","erstgespraech","notizen"];
+// Ab diesen CRM-Status gehen keine Nachfass-Mails mit Erstgespräch-Einladung mehr raus
+const NURTURE_STOP = ["Erstgespräch vereinbart","EG No-Show/Absage","EG Follow-up","Kunde","Ex-Kunde","UQ andere","UQ Bad Data"];
 
 const FB = {
   kuehlschrank: {titel: "die Kühlschrank-Methode", name: "Kühlschrank-Methode", path: "kuehlschrank/", pdf: "Kuehlschrank-Methode.pdf",
@@ -67,7 +70,8 @@ function doPost(e) {
     const row = {token, angemeldet: new Date(), status: "unbestätigt", name, email, telefon: tel,
       telefon_ohne_einwilligung: clean(d.telefon_ohne_einwilligung, 4), quelle: clean(d.quelle, 120),
       einwilligung_mail: clean(d.einwilligung_mail, 60), einwilligung_tel: tel ? clean(d.einwilligung_tel, 60) : "",
-      bestaetigt: "", nurture_schritt: 0, letzte_mail: "", abgemeldet: "", freebie: fb};
+      bestaetigt: "", nurture_schritt: 0, letzte_mail: "", abgemeldet: "", freebie: fb,
+      crm_status: "Warm", versuche: 0, letzter_kontakt: "", naechster_schritt: "", erstgespraech: "", notizen: ""};
     sh.appendRow(COLS.map(c => row[c]));
     sendConfirm(name, email, token, fb);
     alertPhilip(row, fb);
@@ -115,6 +119,13 @@ function sendGuide(name, email, token, fb) {
     btn(base(fb) + FB[fb].pdf, "Guide herunterladen") +
     "<p>Wenn du magst, antworte mir kurz auf diese Mail: Was ist bei dir gerade die größte Baustelle beim Essen? Ich lese jede Antwort selbst.</p><p>Philip</p>", token, fb);
 }
+function callHint() {
+  const now = new Date(), d = Number(Utilities.formatDate(now, "Europe/Berlin", "u")) % 7, hh = Number(Utilities.formatDate(now, "Europe/Berlin", "H"));
+  const we = (d === 0 || d === 6), from = we ? 9 : 14, to = we ? 21 : 20;
+  if (hh >= from && hh < to) return "<b>Jetzt innerhalb von 15 Minuten melden:</b>";
+  const td = (d + 1) % 7, tFrom = (td === 0 || td === 6) ? 9 : 14;
+  return hh < from ? "<b>Heute ab " + from + " Uhr melden</b> (außerhalb deiner Anrufzeiten):" : "<b>Morgen ab " + tFrom + " Uhr melden</b> (außerhalb deiner Anrufzeiten):";
+}
 function alertPhilip(r, fb) {
   const wa = r.telefon ? "https://wa.me/" + r.telefon.replace(/[^\d]/g, "").replace(/^0/, "49") : "";
   MailApp.sendEmail({to: MAIL_TO, name: "Freebie-Funnel",
@@ -122,7 +133,7 @@ function alertPhilip(r, fb) {
     htmlBody: "<p><b>" + h(r.name) + "</b> hat " + FB[fb].titel + " angefordert.</p>" +
       "<p>E-Mail: " + h(r.email) + "<br>Telefon: " + (r.telefon ? h(r.telefon) + " (Einwilligung Anruf/WhatsApp: ja)" : "–") +
       "<br>Quelle: " + h(r.quelle) + "</p>" +
-      (r.telefon ? "<p><b>Jetzt innerhalb von 15 Minuten melden:</b><br><a href='" + wa + "'>WhatsApp öffnen</a> · <a href='tel:" + h(r.telefon) + "'>Anrufen</a></p>" +
+      (r.telefon ? "<p>" + callHint() + "<br><a href='" + wa + "'>WhatsApp öffnen</a> · <a href='tel:" + h(r.telefon) + "'>Anrufen</a></p>" +
         "<p style='color:#526457'>Vorschlag: „Hi " + h(r.name) + ", hier ist Philip 👋 " + FB[fb].waFrage + "“</p>" : "")});
 }
 
@@ -196,6 +207,7 @@ function nurture() {
   const {sh, v} = rows(); const now = new Date(); let sent = 0;
   for (let r = 1; r < v.length && sent < 40; r++) {
     const b = v[r][col("bestaetigt")]; if (!b || v[r][col("abgemeldet")]) continue;
+    if (NURTURE_STOP.indexOf(String(v[r][col("crm_status")] || "")) >= 0) continue;
     const fb = fbOf(v[r]);
     const step = Number(v[r][col("nurture_schritt")]) || 0; const m = NURTURES[fb][step]; if (!m) continue;
     const days = (now - new Date(b)) / 864e5; if (days < m.tag) continue;

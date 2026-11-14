@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="de"><head><meta charset="utf-8">
+<style>
+:root{--g:#2E8B3D;--gd:#1F6B2D;--dk:#123D22;--gl:#EDF5EE;--ink:#13241A;--mut:#5A6B60;--line:#D9E4DC;--warn:#B7791F;--red:#A3261B}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;background:#F4F8F5;color:var(--ink);font-size:15px}
+header{background:var(--dk);color:#fff;padding:16px 18px 14px;position:sticky;top:0;z-index:5}
+header .row{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+header h1{font-size:19px;letter-spacing:-.01em}
+header h1 span{color:#9BE0A6;font-family:Georgia,serif;font-style:italic;font-weight:600}
+.win{font-size:12px;padding:5px 10px;border-radius:99px;background:#2E8B3D}
+.win.off{background:#5A6B60}
+.kpis{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-top:12px}
+.kpi{background:rgba(255,255,255,.08);border-radius:12px;padding:8px 10px}
+.kpi b{display:block;font-size:20px}.kpi span{font-size:11px;color:#C9E4CF}
+nav{display:flex;gap:8px;overflow-x:auto;padding:12px 14px;background:#fff;border-bottom:1px solid var(--line);position:sticky;top:0}
+nav button{flex:none;border:1.5px solid var(--line);background:#fff;border-radius:99px;padding:8px 12px;font:inherit;font-size:13px;font-weight:600;color:var(--ink);cursor:pointer}
+nav button.on{background:var(--g);border-color:var(--g);color:#fff}
+nav button i{font-style:normal;background:var(--gl);color:var(--gd);border-radius:99px;padding:1px 7px;margin-left:5px;font-size:12px}
+nav button.on i{background:rgba(255,255,255,.25);color:#fff}
+main{max-width:860px;margin:0 auto;padding:14px}
+.hint{font-size:13px;color:var(--mut);margin:2px 2px 12px}
+.card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:14px;margin-bottom:12px;box-shadow:0 2px 0 #E4ECE6}
+.top{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
+.nm{font-weight:700;font-size:17px}
+.meta{font-size:12.5px;color:var(--mut);margin-top:3px}
+.badge{display:inline-block;font-size:11px;font-weight:700;border-radius:99px;padding:3px 9px;background:var(--gl);color:var(--gd);white-space:nowrap}
+.badge.s{background:#FFF4D6;color:#8A5A00}
+.contact{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0 10px}
+.contact a{flex:1;min-width:110px;text-align:center;text-decoration:none;font-weight:700;border-radius:12px;padding:11px 8px;font-size:14px}
+.call{background:var(--g);color:#fff}.wa{background:#E7F7EA;color:var(--gd);border:1.5px solid #BFE5C6}.ml{background:#fff;color:var(--ink);border:1.5px solid var(--line)}
+.acts{display:flex;gap:6px;flex-wrap:wrap}
+.acts button{border:1.5px solid var(--line);background:#fff;border-radius:10px;padding:8px 10px;font:inherit;font-size:13px;font-weight:600;cursor:pointer;color:var(--ink)}
+.acts button.p{border-color:var(--g);color:var(--gd)}
+.acts button.n{color:var(--red)}
+.due{font-size:12.5px;font-weight:700;margin-top:6px}
+.due.late{color:var(--red)}.due.ok{color:var(--gd)}
+details{margin-top:10px;font-size:13px}
+details summary{cursor:pointer;color:var(--mut)}
+pre{white-space:pre-wrap;font-family:inherit;background:#F7FAF8;border-radius:10px;padding:10px;margin-top:6px;color:#33463A}
+.empty{text-align:center;color:var(--mut);padding:40px 10px}
+.fab{position:fixed;right:18px;bottom:18px;background:var(--dk);color:#fff;border:0;border-radius:99px;padding:14px 18px;font:inherit;font-weight:700;box-shadow:0 10px 24px rgba(18,61,34,.35);cursor:pointer}
+dialog{border:0;border-radius:18px;padding:18px;width:min(420px,92vw);box-shadow:0 20px 60px rgba(0,0,0,.3)}
+dialog h3{margin-bottom:10px}
+dialog label{display:block;font-size:13px;font-weight:600;margin:10px 0 4px}
+dialog input,dialog select,dialog textarea{width:100%;font:inherit;padding:10px;border:1.5px solid var(--line);border-radius:10px}
+dialog .row2{display:flex;gap:8px;margin-top:14px}
+dialog .row2 button{flex:1;font:inherit;font-weight:700;padding:11px;border-radius:10px;border:1.5px solid var(--line);background:#fff;cursor:pointer}
+dialog .row2 button.go{background:var(--g);color:#fff;border-color:var(--g)}
+.load{position:fixed;inset:0;background:rgba(255,255,255,.6);display:none;align-items:center;justify-content:center;font-weight:700;color:var(--gd);z-index:20}
+.toolbar{display:flex;gap:8px;margin-bottom:10px}
+.toolbar input{flex:1;font:inherit;padding:10px 12px;border:1.5px solid var(--line);border-radius:12px}
+.toolbar button{font:inherit;font-weight:600;padding:10px 12px;border:1.5px solid var(--line);border-radius:12px;background:#fff;cursor:pointer}
+table.fb{width:100%;border-collapse:collapse;font-size:14px;background:#fff;border-radius:14px;overflow:hidden}
+table.fb th,table.fb td{padding:10px;border-bottom:1px solid var(--line);text-align:left}
+table.fb th{background:var(--gl);font-size:12px;color:var(--gd)}
+@media(max-width:560px){.kpis{grid-template-columns:repeat(3,1fr)}}
+</style></head><body>
+<header><div class="row"><h1>Schumann <span>CRM</span></h1><span class="win" id="win"></span></div>
+<div class="kpis" id="kpis"></div></header>
+<nav id="nav"></nav>
+<main><div id="view"></div></main>
+<button class="fab" onclick="openAdd()">+ Lead</button>
+<div class="load" id="load">Speichern …</div>
+
+<dialog id="dlg"><h3 id="dt"></h3><div id="db"></div>
+<div class="row2"><button onclick="dlg.close()">Abbrechen</button><button class="go" id="dgo">Speichern</button></div></dialog>
+
+<script>
+var D={leads:[],now:new Date()}, VIEW="jetzt", Q="";
+var FBN={kuehlschrank:"Kühlschrank",lebensmittel:"Kompass",weihnachten:"Weihnachten",manuell:"Manuell"};
+var VIEWS=[
+ {id:"jetzt",t:"Jetzt anrufen",h:"Warme Leads mit Nummer, noch kein Erstgespräch – neueste zuerst. Ziel: Anruf innerhalb von 15 Minuten.",f:function(l){return l.telefon&&l.crm_status==="Warm"&&!l.naechster_schritt&&!l.abgemeldet}},
+ {id:"faellig",t:"Fällig",h:"Wiedervorlagen und Anrufversuche, deren Zeitpunkt erreicht ist.",f:function(l){return l.naechster_schritt&&new Date(l.naechster_schritt)<=new Date()&&["Kunde","Ex-Kunde","UQ andere","UQ Bad Data","Erstgespräch vereinbart"].indexOf(l.crm_status)<0}},
+ {id:"ergebnis",t:"EG-Ergebnis eintragen",h:"Erstgespräche, die stattgefunden haben – trag ein, wie sie gelaufen sind.",f:function(l){return l.crm_status==="Erstgespräch vereinbart"&&l.erstgespraech&&new Date(l.erstgespraech)<new Date()}},
+ {id:"eg",t:"Erstgespräch vereinbart",h:"Anstehende Erstgespräche.",f:function(l){return l.crm_status==="Erstgespräch vereinbart"&&(!l.erstgespraech||new Date(l.erstgespraech)>=new Date())}},
+ {id:"gespraech",t:"Im Gespräch",h:"Erreicht, Interesse da, noch nicht gebucht.",f:function(l){return l.crm_status==="Im Gespräch"}},
+ {id:"followup",t:"No-Show & Follow-up",h:"No-Shows, Absagen und Follow-ups nach dem Erstgespräch.",f:function(l){return l.crm_status==="EG No-Show/Absage"||l.crm_status==="EG Follow-up"}},
+ {id:"ohne",t:"Warm ohne Nummer",h:"Nur E-Mail – per Mail oder Instagram-DM ansprechen.",f:function(l){return !l.telefon&&l.crm_status==="Warm"}},
+ {id:"nichterreicht",t:"Nicht erreicht",h:"5 Versuche ohne Erfolg – gelegentlich noch mal probieren oder per Mail.",f:function(l){return l.crm_status==="Nicht erreicht"}},
+ {id:"kunden",t:"Kunden",h:"Gewonnene Kunden und Ex-Kunden.",f:function(l){return l.crm_status==="Kunde"||l.crm_status==="Ex-Kunde"}},
+ {id:"alle",t:"Alle",h:"Alle Leads inklusive unqualifizierter.",f:function(){return true}},
+ {id:"zahlen",t:"Zahlen",h:"Auswertung nach Freebie.",f:null}
+];
+function esc(s){return String(s==null?"":s).replace(/[&<>"']/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]})}
+function fmt(d){if(!d)return"";var x=new Date(d);return x.toLocaleDateString("de-DE",{day:"2-digit",month:"2-digit"})+" "+x.toLocaleTimeString("de-DE",{hour:"2-digit",minute:"2-digit"})}
+function ago(d){var m=Math.round((new Date()-new Date(d))/6e4);if(m<60)return"vor "+m+" Min.";var h=Math.round(m/60);if(h<48)return"vor "+h+" Std.";return"vor "+Math.round(h/24)+" Tagen"}
+function wa(t){var n=String(t).replace(/[^\d]/g,"").replace(/^00/,"").replace(/^0/,"49");return"https://wa.me/"+n}
+function windowOpen(){var n=new Date(),d=n.getDay(),h=n.getHours(),we=d===0||d===6;return h>=(we?9:14)&&h<(we?21:20)}
+function load(){busy(1);google.script.run.withSuccessHandler(function(r){D=r;busy(0);render()}).withFailureHandler(err).getData()}
+function busy(b){document.getElementById("load").style.display=b?"flex":"none"}
+function err(e){busy(0);alertBox("Fehler: "+(e&&e.message||e))}
+function alertBox(t){var v=document.getElementById("view");v.insertAdjacentHTML("afterbegin",'<div class="card" style="border-color:#A3261B;color:#A3261B">'+esc(t)+'</div>')}
+function render(){
+ var w=document.getElementById("win"),o=windowOpen();w.textContent=o?"Anrufzeit – jetzt telefonieren":"Außerhalb deiner Anrufzeiten";w.className="win"+(o?"":" off");
+ var L=D.leads,wk=Date.now()-7*864e5,last7=L.filter(function(l){return new Date(l.angemeldet)>wk});
+ var reached=L.filter(function(l){return ["Im Gespräch","Erstgespräch vereinbart","EG No-Show/Absage","EG Follow-up","Kunde","Ex-Kunde"].indexOf(l.crm_status)>=0}).length;
+ var eg=L.filter(function(l){return l.erstgespraech}).length,k=L.filter(function(l){return l.crm_status==="Kunde"}).length,withTel=L.filter(function(l){return l.telefon}).length;
+ document.getElementById("kpis").innerHTML=kp(last7.length,"Leads 7 Tage")+kp(L.length,"Leads gesamt")+kp(withTel?Math.round(reached/withTel*100)+" %":"–","erreicht")+kp(eg,"Erstgespräche")+kp(k,"Kunden");
+ document.getElementById("nav").innerHTML=VIEWS.map(function(v){var c=v.f?L.filter(v.f).length:"";return'<button class="'+(v.id===VIEW?"on":"")+'" onclick="VIEW=\''+v.id+'\';render()">'+v.t+(c!==""?"<i>"+c+"</i>":"")+"</button>"}).join("");
+ var V=VIEWS.filter(function(v){return v.id===VIEW})[0],h='<p class="hint">'+V.h+"</p>";
+ if(!V.f){document.getElementById("view").innerHTML=h+stats();return}
+ h+='<div class="toolbar"><input placeholder="Suchen (Name, E-Mail, Nummer)" value="'+esc(Q)+'" oninput="Q=this.value;renderList()"><button onclick="syncKal()">Kalender abgleichen</button></div><div id="list"></div>';
+ document.getElementById("view").innerHTML=h;renderList()}
+function kp(b,s){return'<div class="kpi"><b>'+b+"</b><span>"+s+"</span></div>"}
+function renderList(){
+ var V=VIEWS.filter(function(v){return v.id===VIEW})[0],q=Q.toLowerCase();
+ var L=D.leads.filter(V.f).filter(function(l){return!q||(l.name+" "+l.email+" "+l.telefon).toLowerCase().indexOf(q)>=0});
+ L.sort(function(a,b){var ka=a.naechster_schritt||a.erstgespraech||a.angemeldet,kb=b.naechster_schritt||b.erstgespraech||b.angemeldet;return VIEW==="jetzt"||VIEW==="alle"||VIEW==="ohne"?new Date(b.angemeldet)-new Date(a.angemeldet):new Date(ka)-new Date(kb)});
+ document.getElementById("list").innerHTML=L.length?L.map(card).join(""):'<div class="empty">Nichts zu tun hier. 👌</div>'}
+function card(l){
+ var t=esc(l.token),fb=FBN[l.freebie]||l.freebie||"–";
+ var due="";if(l.naechster_schritt){var late=new Date(l.naechster_schritt)<new Date();due='<div class="due '+(late?"late":"ok")+'">'+(late?"Fällig seit ":"Nächster Schritt: ")+fmt(l.naechster_schritt)+"</div>"}
+ if(l.erstgespraech)due+='<div class="due ok">Erstgespräch: '+fmt(l.erstgespraech)+"</div>";
+ var c='<div class="contact">'+(l.telefon?'<a class="call" href="tel:'+esc(l.telefon)+'">📞 Anrufen</a><a class="wa" target="_blank" href="'+wa(l.telefon)+'">WhatsApp</a>':"")+(l.email?'<a class="ml" href="mailto:'+esc(l.email)+'">E-Mail</a>':"")+"</div>";
+ var a;
+ if(l.crm_status==="Erstgespräch vereinbart"&&l.erstgespraech&&new Date(l.erstgespraech)<new Date())a=btn(t,"egErg","Kunde","p")+btn(t,"egErg","EG Follow-up")+btn(t,"egErg","EG No-Show/Absage")+btn(t,"egErg","UQ andere","n");
+ else a=btn(t,"nichtErreicht","Nicht erreicht")+btn(t,"egGebucht","EG gebucht","p")+btn(t,"imGespraech","Erreicht – später")+btn(t,"wv","Wiedervorlage")+btn(t,"stat","Status …")+btn(t,"notiz","Notiz");
+ return'<div class="card"><div class="top"><div><div class="nm">'+esc(l.name||"(ohne Name)")+'</div><div class="meta">'+esc(l.email||"")+(l.telefon?" · "+esc(l.telefon):"")+"<br>Eingetragen "+ago(l.angemeldet)+" · "+esc(l.quelle||"")+(l.versuche?" · "+l.versuche+" Versuch(e)":"")+(l.bestaetigt?" · ✓ bestätigt":l.freebie!=="manuell"?" · Mail unbestätigt":"")+'</div></div><div style="text-align:right"><span class="badge">'+esc(fb)+'</span><br><span class="badge s" style="margin-top:4px">'+esc(l.crm_status)+"</span></div></div>"+due+c+'<div class="acts">'+a+"</div>"+(l.notizen?"<details><summary>Verlauf</summary><pre>"+esc(l.notizen)+"</pre></details>":"")+"</div>"}
+function btn(t,a,label,cls){return'<button class="'+(cls||"")+'" onclick="go(\''+t+"','"+a+"','"+label+"')\">"+label+"</button>"}
+function go(t,a,label){
+ if(a==="nichtErreicht")return run(t,"nichtErreicht",{});
+ if(a==="egGebucht")return ask("Erstgespräch gebucht",'<label>Termin</label><input type="datetime-local" id="f1"><label>Notiz (optional)</label><textarea id="f2" rows="2"></textarea>',function(){run(t,"egGebucht",{datum:val("f1"),notiz:val("f2")})});
+ if(a==="imGespraech")return ask("Erreicht – später nachfassen",'<label>Wann wieder melden?</label><input type="datetime-local" id="f1"><label>Worum ging es?</label><textarea id="f2" rows="3" placeholder="z. B. Ziel, Hindernis, Einwand"></textarea>',function(){run(t,"imGespraech",{datum:val("f1"),notiz:val("f2")})});
+ if(a==="wv")return ask("Wiedervorlage",'<label>Datum &amp; Uhrzeit</label><input type="datetime-local" id="f1"><label>Notiz (optional)</label><textarea id="f2" rows="2"></textarea>',function(){run(t,"wiedervorlage",{datum:val("f1"),notiz:val("f2")})});
+ if(a==="notiz")return ask("Notiz",'<textarea id="f2" rows="4"></textarea>',function(){run(t,"notiz",{notiz:val("f2")})});
+ if(a==="stat")return ask("Status ändern",'<label>Status</label><select id="f1">'+["Warm","Im Gespräch","Erstgespräch vereinbart","EG No-Show/Absage","EG Follow-up","Kunde","Ex-Kunde","UQ andere","UQ Bad Data","Nicht erreicht"].map(function(s){return"<option>"+s+"</option>"}).join("")+'</select><label>Wiedervorlage (optional)</label><input type="datetime-local" id="f3"><label>Notiz (optional)</label><textarea id="f2" rows="2"></textarea>',function(){run(t,"status",{status:val("f1"),datum:val("f3"),notiz:val("f2")})});
+ if(a==="egErg"){var needDate=label!=="Kunde"&&label!=="UQ andere";return ask("Erstgespräch: "+label,(needDate?'<label>Wann nachfassen?</label><input type="datetime-local" id="f1">':"")+'<label>Notiz</label><textarea id="f2" rows="3" placeholder="Ergebnis, Einwände, nächster Schritt"></textarea>',function(){run(t,"egErgebnis",{status:label,datum:needDate?val("f1"):"",notiz:val("f2")})})}
+}
+function val(id){var e=document.getElementById(id);return e?e.value:""}
+function ask(title,body,cb){var d=document.getElementById("dlg");document.getElementById("dt").textContent=title;document.getElementById("db").innerHTML=body;document.getElementById("dgo").onclick=function(){d.close();cb()};d.showModal()}
+function run(t,a,p){busy(1);google.script.run.withSuccessHandler(function(r){D=r;busy(0);render()}).withFailureHandler(err).act(t,a,p)}
+function syncKal(){busy(1);google.script.run.withSuccessHandler(function(r){D=r;busy(0);render()}).withFailureHandler(err).syncJetzt()}
+function openAdd(){ask("Lead manuell anlegen",'<label>Name</label><input id="a1"><label>Telefon</label><input id="a2" placeholder="+49 …"><label>E-Mail</label><input id="a3"><label>Quelle</label><select id="a4"><option>Instagram DM</option><option>Empfehlung</option><option>TikTok</option><option>Sonstiges</option></select><label>Notiz</label><textarea id="a5" rows="2"></textarea>',function(){busy(1);google.script.run.withSuccessHandler(function(r){D=r;busy(0);VIEW="alle";render()}).withFailureHandler(err).addLead({name:val("a1"),telefon:val("a2"),email:val("a3"),quelle:val("a4"),notiz:val("a5")})})}
+function stats(){
+ var fbs={};D.leads.forEach(function(l){var f=FBN[l.freebie]||l.freebie||"–";fbs[f]=fbs[f]||{n:0,b:0,t:0,e:0,k:0};var o=fbs[f];o.n++;if(l.bestaetigt)o.b++;if(l.telefon)o.t++;if(l.erstgespraech)o.e++;if(l.crm_status==="Kunde")o.k++});
+ var r=Object.keys(fbs).map(function(f){var o=fbs[f];return"<tr><td><b>"+esc(f)+"</b></td><td>"+o.n+"</td><td>"+pc(o.b,o.n)+"</td><td>"+pc(o.t,o.n)+"</td><td>"+o.e+" ("+pc(o.e,o.n)+")</td><td>"+o.k+"</td></tr>"}).join("");
+ return'<table class="fb"><tr><th>Freebie</th><th>Leads</th><th>Mail bestätigt</th><th>mit Nummer</th><th>Erstgespräche</th><th>Kunden</th></tr>'+(r||'<tr><td colspan="6">Noch keine Leads</td></tr>')+"</table>"}
+function pc(a,b){return b?Math.round(a/b*100)+" %":"–"}
+load();setInterval(function(){if(!document.querySelector("dialog[open]"))load()},120000);
+</script></body></html>
