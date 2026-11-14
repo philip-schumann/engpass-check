@@ -95,7 +95,7 @@ function addLead(o) {
     email: String(o.email || "").trim().toLowerCase(), telefon: String(o.telefon || "").replace(/[^\d+ ]/g, ""),
     quelle: String(o.quelle || "manuell"), freebie: "manuell", crm_status: "Warm", versuche: 0,
     notizen: o.notiz ? Utilities.formatDate(new Date(), TZ, "dd.MM. HH:mm") + " – " + o.notiz : ""};
-  sh().appendRow(COLS.map(c => row[c] !== undefined ? row[c] : ""));
+  sh().appendRow(COLS.map(c => row[c] === undefined ? "" : (c === "telefon" && row[c] ? "'" + row[c] : row[c])));
   return getData();
 }
 

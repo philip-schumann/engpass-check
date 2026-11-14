@@ -72,7 +72,7 @@ function doPost(e) {
       einwilligung_mail: clean(d.einwilligung_mail, 60), einwilligung_tel: tel ? clean(d.einwilligung_tel, 60) : "",
       bestaetigt: "", nurture_schritt: 0, letzte_mail: "", abgemeldet: "", freebie: fb,
       crm_status: "Warm", versuche: 0, letzter_kontakt: "", naechster_schritt: "", erstgespraech: "", notizen: ""};
-    sh.appendRow(COLS.map(c => row[c]));
+    sh.appendRow(COLS.map(c => c === "telefon" && row[c] ? "'" + row[c] : row[c])); // ' verhindert, dass +49 als Formel gelesen wird
     sendConfirm(name, email, token, fb);
     alertPhilip(row, fb);
     return out("ok");
