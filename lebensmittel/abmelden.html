@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Abgemeldet | Schumann Consulting</title>
+<meta name="robots" content="noindex">
+<link rel="icon" type="image/png" href="../favicon.png">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="wrap">
+  <section class="top">
+    <header><img src="../logo-weiss.png" alt="">Schumann Consulting</header>
+    <span class="badge">✓ Abgemeldet</span>
+    <h1>Du bist <span>abgemeldet.</span></h1>
+    <p class="lede">Du bekommst keine weiteren E-Mails mehr von mir. Danke, dass du reingeschaut hast – den Guide kannst du natürlich behalten.</p>
+    <div class="mock"><img src="pdf-cover.jpg" alt="Titelseite: Der Lebensmittel-Kompass" width="662" height="936"></div>
+  </section>
+  <div class="after-mock"></div>
+  <a class="btn big" href="Lebensmittel-Kompass.pdf" target="_blank" rel="noopener">Guide noch mal öffnen</a>
+  <footer><p><a href="datenschutz.html">Datenschutz</a> · <a href="datenschutz.html#impressum">Impressum</a></p></footer>
+</div>
+<script>
+const t = new URLSearchParams(location.search).get("t");
+if (t) try { fetch("https://script.google.com/macros/s/AKfycbzi4E3XykD9T5a9UvUA9vFrCjR3i4qxN4HS1q0QP5oTxoQz5lNAKvwQUjfsfTQmsklt/exec", {method: "POST", mode: "no-cors", headers: {"Content-Type": "text/plain"}, body: JSON.stringify({a: "unsub", t})}); } catch (e) {}
+</script>
+</body>
+</html>

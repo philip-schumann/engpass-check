@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Die Weihnachts-Formel – gratis Guide | Schumann Consulting</title>
+<meta name="description" content="Gratis-Playbook für die Feiertage: 3 Regeln, Weihnachtsmarkt-Spickzettel, Festtage-Plan, Plätzchen-Strategie und 10-Minuten-Januar-Reset.">
+<meta property="og:title" content="Die Weihnachts-Formel – gratis Guide">
+<meta property="og:image" content="cover.jpg">
+<link rel="icon" type="image/png" href="../favicon.png">
+<link rel="stylesheet" href="style.css">
+<script src="consent.js"></script>
+</head>
+<body>
+<div class="wrap">
+  <section class="top">
+    <header><img src="../logo-weiss.png" alt="">Schumann Consulting</header>
+    <span class="badge">Gratis-Guide · 8 Seiten</span>
+    <h1>Die <span>Weihnachts</span>-Formel</h1>
+    <p class="lede">Genieß die Feiertage – ohne im Januar wieder bei null anzufangen.</p>
+    <div class="mock"><img src="pdf-cover.jpg" alt="Titelseite: Die Weihnachts-Formel" width="662" height="936"></div>
+  </section>
+  <div class="after-mock"></div>
+
+  <ul class="perks">
+    <li><strong>Die 3 Regeln</strong> für die ganze Adventszeit</li>
+    <li><strong>Der Weihnachtsmarkt-Spickzettel</strong> – genießen ohne Kontrollverlust</li>
+    <li><strong>Dein Festtage-Plan</strong> und die Plätzchen-Strategie</li>
+    <li><strong>Der 10-Minuten-Januar-Reset</strong> statt Neustart bei null</li>
+  </ul>
+
+  <form id="f" novalidate>
+    <h2>Wohin soll ich dir den Guide schicken?</h2>
+    <label>Vorname<input type="text" id="name" autocomplete="given-name" maxlength="40" required></label>
+    <label>E-Mail<input type="email" id="email" autocomplete="email" maxlength="80" required></label>
+    <label>Handynummer <small>optional – für eine kurze Nachricht von mir, ob du mit dem Guide klarkommst</small><input type="tel" id="tel" autocomplete="tel" maxlength="25" placeholder="+49 …"></label>
+    <label class="chk"><input type="checkbox" id="c1" required><span>Ja, schick mir den Guide und weitere Tipps von Philip per E-Mail. Abmelden geht jederzeit mit einem Klick. Hinweise in der <a href="datenschutz.html" target="_blank" rel="noopener">Datenschutzerklärung</a>.</span></label>
+    <label class="chk" id="c2w" hidden><input type="checkbox" id="c2"><span>Philip darf mich unter dieser Nummer per WhatsApp oder Anruf zu meinem Guide kontaktieren.</span></label>
+    <input type="text" id="web" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px" aria-hidden="true">
+    <p class="err" id="err" role="alert"></p>
+    <button class="btn big" type="submit" id="go">Guide kostenlos anfordern →</button>
+    <p class="small">Du bekommst gleich eine Mail. Einmal bestätigen, dann ist der Guide da.</p>
+  </form>
+
+  <div class="me">
+    <img src="../philip.jpg" alt="Philip Schumann">
+    <p class="small"><strong style="color:var(--ink)">Philip Schumann</strong><br>Online-Fitnesscoach aus Coburg. Ich helfe Frauen, abzunehmen, ohne dass der Alltag dafür auf den Kopf gestellt wird.</p>
+  </div>
+
+  <footer>
+    <p>Allgemeine Tipps für gesunde Erwachsene, keine medizinische Beratung.</p>
+    <p><a href="datenschutz.html">Datenschutz</a> · <a href="datenschutz.html#impressum">Impressum</a> · <a href="#" onclick="scResetConsent();return false">Cookie-Einstellungen</a></p>
+  </footer>
+</div>
+
+<script>
+const ENDPOINT = "https://script.google.com/macros/s/AKfycbzi4E3XykD9T5a9UvUA9vFrCjR3i4qxN4HS1q0QP5oTxoQz5lNAKvwQUjfsfTQmsklt/exec"; // ← Web-App-URL des Freebie-Backends
+const $ = id => document.getElementById(id);
+const qs = new URLSearchParams(location.search);
+const SRC = [qs.get("utm_source"), qs.get("utm_campaign"), qs.get("utm_content")].filter(Boolean).join(" / ") || "direkt";
+
+$("tel").addEventListener("input", () => { $("c2w").hidden = !$("tel").value.trim(); });
+
+$("f").addEventListener("submit", e => {
+  e.preventDefault();
+  const name = $("name").value.trim(), email = $("email").value.trim(), tel = $("tel").value.trim();
+  if (!name) return fail("Bitte trag deinen Vornamen ein.");
+  if (!/^[^\s@<>"]+@[^\s@<>"]+\.[a-z]{2,}$/i.test(email)) return fail("Bitte prüf deine E-Mail-Adresse.");
+  if (!$("c1").checked) return fail("Bitte setz das Häkchen, damit ich dir den Guide per E-Mail schicken darf.");
+  if ($("web").value) return; // Spam-Falle
+  $("go").disabled = true; $("go").textContent = "Einen Moment …";
+  const now = new Date().toISOString();
+  const data = {
+    a: "signup", freebie: "weihnachten", name, email,
+    telefon: tel && $("c2").checked ? tel : "",
+    telefon_ohne_einwilligung: tel && !$("c2").checked ? "ja" : "",
+    einwilligung_mail: now + " (Checkbox Mail v1)",
+    einwilligung_tel: tel && $("c2").checked ? now + " (Checkbox Telefon v1)" : "",
+    quelle: SRC
+  };
+  const go = () => location.href = "danke.html?n=" + encodeURIComponent(name);
+  try {
+    fetch(ENDPOINT, {method: "POST", mode: "no-cors", headers: {"Content-Type": "text/plain"}, body: JSON.stringify(data)})
+      .then(go, go);
+  } catch (err) { go(); }
+  setTimeout(go, 2500);
+});
+function fail(m) { $("err").textContent = m; }
+</script>
+</body>
+</html>

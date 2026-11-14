@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Dein Guide ist da – Weihnachts-Formel | Schumann Consulting</title>
+<meta name="robots" content="noindex">
+<link rel="icon" type="image/png" href="../favicon.png">
+<link rel="stylesheet" href="style.css">
+<script src="consent.js"></script>
+</head>
+<body>
+<div class="wrap">
+  <section class="top">
+    <header><img src="../logo-weiss.png" alt="">Schumann Consulting</header>
+    <span class="badge">✓ E-Mail bestätigt</span>
+    <h1 id="hi">Dein Guide ist <span>da.</span></h1>
+    <p class="lede">Die Weihnachts-Formel liegt bereit. Zusätzlich habe ich dir den Guide per Mail geschickt, damit du sie jederzeit wiederfindest.</p>
+    <div class="mock"><img src="pdf-cover.jpg" alt="Titelseite: Die Weihnachts-Formel" width="662" height="936"></div>
+  </section>
+
+  <div class="after-mock" style="display:flex;flex-direction:column;gap:12px">
+    <a class="btn big" id="dl" href="Weihnachts-Formel.pdf" target="_blank" rel="noopener">Guide jetzt öffnen (PDF) →</a>
+    <p class="small" style="text-align:center">8 Seiten · für die ganze Adventszeit</p>
+  </div>
+
+  <div class="card">
+    <h2>So holst du am meisten raus</h2>
+    <ol class="steps">
+      <li><strong>Heute:</strong> Seite 2 lesen und die echten Festtage im Kalender markieren.</li>
+      <li><strong>Vor dem nächsten Weihnachtsmarkt:</strong> Spickzettel auf Seite 4 anschauen.</li>
+      <li><strong>Am 2. Januar:</strong> 10-Minuten-Reset machen.</li>
+    </ol>
+  </div>
+
+  <div class="card dark">
+    <div class="person"><img src="../philip.jpg" alt="Philip Schumann"><div><b>Philip Schumann</b><span>Online-Fitnesscoach · Coburg</span></div></div>
+    <h2>Willst du, dass es diesmal wirklich klappt?</h2>
+    <p>Die Formel hilft dir durch die Feiertage. Bei den meisten Frauen, mit denen ich arbeite, ist die eigentliche Frage aber: Wie geht es im Januar weiter, ohne wieder bei null anzufangen? Im kostenlosen Erstgespräch finden wir heraus, woran es bei dir hängt.</p>
+    <ol class="steps">
+      <li>Wir schauen, wo du gerade stehst.</li>
+      <li>Wir finden deinen Engpass.</li>
+      <li>Du gehst mit einem klaren nächsten Schritt raus – egal, ob wir danach zusammenarbeiten.</li>
+    </ol>
+    <a class="btn big" id="cal" href="https://calendly.com/philip-schumann/erstgespraech?utm_source=freebie&utm_medium=bestaetigt&utm_campaign=weihnachten" target="_blank" rel="noopener">Kostenloses Erstgespräch buchen →</a>
+  </div>
+
+  <footer>
+    <p>Allgemeine Tipps für gesunde Erwachsene, keine medizinische Beratung.</p>
+    <p><a href="datenschutz.html">Datenschutz</a> · <a href="datenschutz.html#impressum">Impressum</a> · <a href="#" onclick="scResetConsent();return false">Cookie-Einstellungen</a></p>
+  </footer>
+</div>
+<script>
+const ENDPOINT = "https://script.google.com/macros/s/AKfycbzi4E3XykD9T5a9UvUA9vFrCjR3i4qxN4HS1q0QP5oTxoQz5lNAKvwQUjfsfTQmsklt/exec";
+const q = new URLSearchParams(location.search), t = q.get("t"), n = (q.get("n") || "").replace(/[^\p{L}\- ]/gu, "").slice(0, 20);
+if (n) document.getElementById("hi").innerHTML = "Dein Guide ist da, <span>" + n + ".</span>";
+if (t) {
+  try { fetch(ENDPOINT, {method: "POST", mode: "no-cors", headers: {"Content-Type": "text/plain"}, body: JSON.stringify({a: "confirm", t})}); } catch (e) {}
+  scTrack("CompleteRegistration", {content_name: "Weihnachts-Formel"});
+}
+document.getElementById("cal").addEventListener("click", () => scTrack("Contact", {content_name: "Calendly Bestaetigt"}));
+</script>
+</body>
+</html>

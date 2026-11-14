@@ -71,7 +71,7 @@ $("f").addEventListener("submit", e => {
   $("go").disabled = true; $("go").textContent = "Einen Moment …";
   const now = new Date().toISOString();
   const data = {
-    a: "signup", name, email,
+    a: "signup", freebie: "kuehlschrank", name, email,
     telefon: tel && $("c2").checked ? tel : "",
     telefon_ohne_einwilligung: tel && !$("c2").checked ? "ja" : "",
     einwilligung_mail: now + " (Checkbox Mail v1)",
