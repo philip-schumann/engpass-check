@@ -105,7 +105,7 @@ function doGet(e) {
 function sendConfirm(name, email, token, fb) {
   const link = base(fb) + "bestaetigt.html?t=" + token + "&n=" + encodeURIComponent(name);
   mail(email, "Bitte kurz bestätigen – dann kommt dein Guide",
-    "<p>Hi " + h(name) + ",</p><p>danke für dein Interesse an " + FB[fb].titel + "! Klick einmal auf den Button, dann schicke ich dir den Guide sofort.</p>" +
+    "<p>Hi " + h(name) + ",</p><p>schön, dass du " + FB[fb].titel + " angefordert hast! Klick einmal auf den Button, dann schicke ich dir den Guide sofort.</p>" +
     btn(link, "Ja, Guide schicken") +
     "<p style='font-size:13px;color:#526457'>Damit bestätigst du, dass ich dir den Guide und weitere Tipps per E-Mail schicken darf. Abmelden geht jederzeit mit einem Klick. Wenn du dich nicht angemeldet hast, ignorier diese Mail einfach.</p>", null, fb);
 }
