@@ -1,6 +1,6 @@
 /**
  * Freebie-Backend Schumann Coaching (Google Apps Script) – mehrere Freebies, eine Tabelle.
- * Freebies: kuehlschrank, lebensmittel, weihnachten. Spalte "freebie" in der Tabelle.
+ * Freebies: kuehlschrank, lebensmittel, weihnachten, teller, doener. Spalte "freebie" in der Tabelle.
  * Ablauf: Anmeldung → Bestätigungsmail (Double-Opt-in) + Sofort-Mail an Philip
  *         → bestaetigt.html meldet Bestätigung → Guide-Mail → 5 Nachfass-Mails (Tag 1, 2, 4, 6, 8).
  */
@@ -25,7 +25,15 @@ const FB = {
   weihnachten: {titel: "die Weihnachts-Formel", name: "Weihnachts-Formel", path: "weihnachten/", pdf: "Weihnachts-Formel.pdf",
     guideBetreff: "Hier ist deine Weihnachts-Formel",
     guideTipp: "Mein Tipp: Nimm dir jetzt kurz deinen Kalender und markier die echten Festtage (Seite 3). Das dauert 2 Minuten und nimmt dir die ganze Adventszeit Druck raus.",
-    waFrage: "Deine Weihnachts-Formel ist unterwegs. Kurze Frage: Was ist für dich in der Weihnachtszeit die größte Herausforderung – Weihnachtsmarkt, Plätzchen oder die Feiertage selbst?"}
+    waFrage: "Deine Weihnachts-Formel ist unterwegs. Kurze Frage: Was ist für dich in der Weihnachtszeit die größte Herausforderung – Weihnachtsmarkt, Plätzchen oder die Feiertage selbst?"},
+  teller: {titel: "den Teller-Plan", name: "Teller-Plan", path: "teller/", pdf: "Teller-Plan.pdf", art: "Plan",
+    guideBetreff: "Hier ist dein Teller-Plan",
+    guideTipp: "Mein Tipp: Lies Seite 2 und 3, kauf mit der Liste von Seite 6 ein und starte am nächsten Montag mit Tag 1. Du musst nichts zählen, nur nachmachen.",
+    waFrage: "Dein Teller-Plan ist unterwegs. Kurze Frage: Was ist bei dir gerade die größte Baustelle – die Frage, was du essen sollst, die Zeit oder der Abend?"},
+  doener: {titel: "den Döner-Plan", name: "Döner-Plan", path: "doener/", pdf: "Doener-Plan.pdf", art: "Plan",
+    guideBetreff: "Hier ist dein Döner-Plan",
+    guideTipp: "Mein Tipp: Lies Seite 2 bis 4 und nimm dir am Sonntag 30 Minuten fürs Meal Prep. Dann läuft die Woche fast von allein – Döner am Mittwoch inklusive.",
+    waFrage: "Dein Döner-Plan ist unterwegs. Kurze Frage: Woran ist es bei dir bisher gescheitert – am Verzicht, an der Zeit oder am Wochenende?"}
 };
 function base(fb) { return ROOT + FB[fb || "kuehlschrank"].path; }
 function cal(fb) { return "https://calendly.com/philip-schumann/erstgespraech?utm_source=freebie&utm_medium=mail&utm_campaign=" + (fb || "kuehlschrank"); }
@@ -108,15 +116,15 @@ function doGet(e) {
 /* ---------- Mails ---------- */
 function sendConfirm(name, email, token, fb) {
   const link = base(fb) + "bestaetigt.html?t=" + token + "&n=" + encodeURIComponent(name);
-  mail(email, "Bitte kurz bestätigen – dann kommt dein Guide",
-    "<p>Hi " + h(name) + ",</p><p>schön, dass du " + FB[fb].titel + " angefordert hast! Klick einmal auf den Button, dann schicke ich dir den Guide sofort.</p>" +
-    btn(link, "Ja, Guide schicken") +
-    "<p style='font-size:13px;color:#526457'>Damit bestätigst du, dass ich dir den Guide und weitere Tipps per E-Mail schicken darf. Abmelden geht jederzeit mit einem Klick. Wenn du dich nicht angemeldet hast, ignorier diese Mail einfach.</p>", null, fb);
+  mail(email, "Bitte kurz bestätigen – dann kommt dein " + (FB[fb].art || "Guide"),
+    "<p>Hi " + h(name) + ",</p><p>schön, dass du " + FB[fb].titel + " angefordert hast! Klick einmal auf den Button, dann schicke ich dir " + (FB[fb].art === "Plan" ? "den Plan" : "den Guide") + " sofort.</p>" +
+    btn(link, "Ja, " + (FB[fb].art || "Guide") + " schicken") +
+    "<p style='font-size:13px;color:#526457'>Damit bestätigst du, dass ich dir " + (FB[fb].art === "Plan" ? "den Plan" : "den Guide") + " und weitere Tipps per E-Mail schicken darf. Abmelden geht jederzeit mit einem Klick. Wenn du dich nicht angemeldet hast, ignorier diese Mail einfach.</p>", null, fb);
 }
 function sendGuide(name, email, token, fb) {
   mail(email, FB[fb].guideBetreff,
-    "<p>Hi " + h(name) + ",</p><p>hier ist dein Guide. " + FB[fb].guideTipp + "</p>" +
-    btn(base(fb) + FB[fb].pdf, "Guide herunterladen") +
+    "<p>Hi " + h(name) + ",</p><p>hier ist dein " + (FB[fb].art || "Guide") + ". " + FB[fb].guideTipp + "</p>" +
+    btn(base(fb) + FB[fb].pdf, (FB[fb].art || "Guide") + " herunterladen") +
     "<p>Wenn du magst, antworte mir kurz auf diese Mail: Was ist bei dir gerade die größte Baustelle beim Essen? Ich lese jede Antwort selbst.</p><p>Philip</p>", token, fb);
 }
 function callHint() {
@@ -201,7 +209,40 @@ const NURTURE_W = [
     "<p><b>Was ist für dich die größte Herausforderung in der Weihnachtszeit?</b> Antworte mir einfach mit einem Satz. Ich lese jede Antwort selbst und melde mich mit einem ehrlichen Tipp.</p>" +
     "<p>Und wenn du im Januar nicht wieder bei null anfangen willst, such dir hier einen Termin aus:</p>{cal}<p>Philip</p>"}
 ];
-const NURTURES = {kuehlschrank: NURTURE_K, lebensmittel: NURTURE_L, weihnachten: NURTURE_W};
+
+const NURTURE_T = [
+  {tag: 1, betreff: "Hast du schon eingekauft?", text:
+    "<p>Hi {name},</p><p>kurze Frage: Hast du die Einkaufsliste von Seite 6 schon genutzt? Der Plan funktioniert nur, wenn die Sachen im Kühlschrank sind, bevor der Alltag losgeht.</p>" +
+    "<p>Mein Tipp: Mach ein Foto von der Liste und kauf einmal für die ganze Woche ein. Dann fällt die Frage „Was esse ich heute?“ ab Montag einfach weg.</p><p>Philip</p>"},
+  {tag: 2, betreff: "Warum du nicht zählen musst", text:
+    "<p>Hi {name},</p><p>vielleicht fragst du dich, ob Abnehmen ohne Zählen wirklich funktioniert. Die ehrliche Antwort: Ja – weil die Teller-Regel das Zählen für dich übernimmt.</p>" +
+    "<p>Halb Gemüse, ein Viertel Protein, ein Viertel Beilage. Damit landest du fast automatisch bei einer guten Menge, wirst satt und hast trotzdem kein Verbot im Kopf. Du musst die Zahlen nicht kennen, sie stecken schon im Teller.</p><p>Philip</p>"},
+  {tag: 4, betreff: "Wenn die Familie mitisst", text:
+    "<p>Hi {name},</p><p>eine Frage höre ich ständig: „Und was ist, wenn ich für die ganze Familie koche?“ Die Antwort: Du kochst nicht extra. Du nimmst dir vom Familienessen zuerst Gemüse und Protein und dann eine Faust Beilage.</p>" +
+    "<p>Das klappt bei Spaghetti, beim Sonntagsbraten und auch bei der Pizza. Wenn du wissen willst, wie dein eigener Plan mit deinem Alltag aussehen würde, lass uns sprechen.</p>{cal}<p>Philip</p>"},
+  {tag: 6, betreff: "So läuft ein Erstgespräch bei mir ab", text: NURTURE_K[3].text},
+  {tag: 8, betreff: "Letzte Mail dieser Reihe", text:
+    "<p>Hi {name},</p><p>das ist meine letzte Mail zum Teller-Plan. Eine Frage habe ich noch an dich:</p>" +
+    "<p><b>Wie lief deine erste Woche mit dem Plan?</b> Antworte mir einfach mit einem Satz. Ich lese jede Antwort selbst und melde mich mit einem ehrlichen Tipp.</p>" +
+    "<p>Und wenn du das Thema dieses Mal richtig angehen willst, such dir hier einen Termin aus:</p>{cal}<p>Philip</p>"}
+];
+const NURTURE_D = [
+  {tag: 1, betreff: "Sonntag schon geblockt?", text:
+    "<p>Hi {name},</p><p>der wichtigste Teil vom Döner-Plan dauert 30 Minuten: das Meal Prep am Sonntag. Wenn die Boxen im Kühlschrank stehen, läuft die Woche fast von allein.</p>" +
+    "<p>Leg dir den Termin jetzt ins Handy. Ofen an, Reis und Chili parallel – und du musst mittags nie wieder überlegen.</p><p>Philip</p>"},
+  {tag: 2, betreff: "Warum der Döner im Plan steht", text:
+    "<p>Hi {name},</p><p>die meisten Diäten scheitern nicht am Essen, sondern am Verzicht. Wer sich alles verbietet, hält zwei Wochen durch und haut dann am Wochenende alles raus.</p>" +
+    "<p>Deshalb steht der Döner fest im Plan. Wenn du weißt, dass am Mittwoch Döner kommt, hältst du den Rest der Woche locker durch. Was eingeplant ist, ist kein Ausrutscher.</p><p>Philip</p>"},
+  {tag: 4, betreff: "Das Wochenende entscheidet", text:
+    "<p>Hi {name},</p><p>unter der Woche läuft es bei den meisten gut. Dann kommt Freitag: Bier, Grillen, Imbiss auf dem Heimweg – und Montag fühlt sich an wie Neustart.</p>" +
+    "<p>Die Regel aus dem Plan: Anzahl Bier vorher festlegen und das Lieblingsessen bewusst einplanen statt nebenbei mitzunehmen. Wenn du wissen willst, wie dein Plan mit Job, Training und Wochenende aussehen würde, lass uns sprechen.</p>{cal}<p>Philip</p>"},
+  {tag: 6, betreff: "So läuft ein Erstgespräch bei mir ab", text: NURTURE_K[3].text},
+  {tag: 8, betreff: "Letzte Mail dieser Reihe", text:
+    "<p>Hi {name},</p><p>das ist meine letzte Mail zum Döner-Plan. Eine Frage habe ich noch an dich:</p>" +
+    "<p><b>Woran ist es bei dir bisher am meisten gescheitert?</b> Antworte mir einfach mit einem Satz. Ich lese jede Antwort selbst und melde mich mit einem ehrlichen Tipp.</p>" +
+    "<p>Und wenn du das Thema dieses Mal richtig angehen willst, such dir hier einen Termin aus:</p>{cal}<p>Philip</p>"}
+];
+const NURTURES = {kuehlschrank: NURTURE_K, lebensmittel: NURTURE_L, weihnachten: NURTURE_W, teller: NURTURE_T, doener: NURTURE_D};
 
 function nurture() {
   const {sh, v} = rows(); const now = new Date(); let sent = 0;
