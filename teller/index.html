@@ -11,7 +11,7 @@
 <link rel="stylesheet" href="style.css">
 <script src="consent.js"></script>
 </head>
-<body>
+<body class="lp">
 <div class="wrap">
   <section class="top">
     <header><img src="../logo-weiss.png" alt="">Schumann Consulting</header>
@@ -23,17 +23,16 @@
   <div class="after-mock"></div>
 
   <ul class="perks">
-    <li><strong>Die Teller-Regel:</strong> so sieht jede Mahlzeit aus – ohne Zählen, ohne Waage</li>
-    <li><strong>7 fertige Tage</strong> mit Frühstück, Mittag, Abend und Snack</li>
-    <li><strong>9 Rezepte</strong> in unter 15 Minuten</li>
-    <li><strong>Einkaufsliste</strong> für die ganze Woche zum Abhaken</li>
+    <li>Teller-Regel statt Zählen</li>
+    <li>7 fertige Tage zum Nachmachen</li>
+    <li>9 Rezepte unter 15 Min.</li>
+    <li>Einkaufsliste für die Woche</li>
   </ul>
 
   <form id="f" novalidate>
     <h2>Wohin soll ich dir den Plan schicken?</h2>
-    <label>Vorname<input type="text" id="name" autocomplete="given-name" maxlength="40" required></label>
-    <label>E-Mail<input type="email" id="email" autocomplete="email" maxlength="80" required></label>
-    <label>Handynummer <small>optional – für eine kurze Nachricht von mir, ob du mit dem Plan klarkommst</small><input type="tel" id="tel" autocomplete="tel" maxlength="25" placeholder="+49 …"></label>
+    <div class="row"><label>Vorname<input type="text" id="name" autocomplete="given-name" maxlength="40" required></label><label>E-Mail<input type="email" id="email" autocomplete="email" maxlength="80" required></label></div>
+    <label><span>Handynummer <small>(optional)</small></span><input type="tel" id="tel" autocomplete="tel" maxlength="25" placeholder="+49 …"></label>
     <label class="chk"><input type="checkbox" id="c1" required><span>Ja, schick mir den Plan und weitere Tipps von Philip per E-Mail. Abmelden geht jederzeit mit einem Klick. Hinweise in der <a href="datenschutz.html" target="_blank" rel="noopener">Datenschutzerklärung</a>.</span></label>
     <label class="chk" id="c2w" hidden><input type="checkbox" id="c2"><span>Philip darf mich unter dieser Nummer per WhatsApp oder Anruf zu meinem Plan kontaktieren.</span></label>
     <input type="text" id="web" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px" aria-hidden="true">

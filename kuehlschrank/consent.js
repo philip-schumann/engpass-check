@@ -27,7 +27,7 @@
     var d = document.createElement("div");
     d.id = "cookie";
     d.innerHTML =
-      '<p><b>Cookies & Meta-Pixel</b><br>Ich nutze den Meta-Pixel, um zu messen, ob meine Anzeigen funktionieren, und um dir passende Inhalte zu zeigen. Das passiert nur, wenn du zustimmst. Mehr in der <a href="datenschutz.html" target="_blank" rel="noopener">Datenschutzerklärung</a>.</p>' +
+      '<p><b>Cookies & Meta-Pixel:</b> Nur mit deiner Zustimmung nutze ich den Meta-Pixel, um den Erfolg meiner Anzeigen zu messen und dir passende Inhalte zu zeigen. Mehr in der <a href="datenschutz.html" target="_blank" rel="noopener">Datenschutzerklärung</a>.</p>' +
       '<div><button type="button" data-v="no">Nur notwendige</button><button type="button" data-v="yes">Akzeptieren</button></div>';
     d.addEventListener("click", function (e) {
       var v = e.target.getAttribute && e.target.getAttribute("data-v");

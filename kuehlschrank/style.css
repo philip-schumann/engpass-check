@@ -70,3 +70,32 @@ footer a,.chk a{color:var(--accent-ink)}
 .check:before{content:"✓";width:26px;height:26px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-size:.85rem;flex:none}
 .mailbox{display:flex;gap:10px;flex-wrap:wrap}
 .mailbox a{flex:1;min-width:120px;text-align:center;border:1.5px solid var(--line);border-radius:12px;padding:12px;color:var(--ink);text-decoration:none;font-weight:600;font-size:.9375rem;background:#fff}
+/* ---- Kompakte Landingpage (alles über dem Falz am Handy) ---- */
+body.lp .wrap{gap:12px;padding:14px 14px 40px}
+body.lp .top{margin:-14px -14px 0;padding:14px 14px 18px;gap:6px 12px;display:grid;grid-template-columns:1fr 32%;grid-template-areas:"hd hd" "bd mk" "h1 mk" "ld mk";align-items:start;border-radius:0 0 22px 22px}
+body.lp .top header{grid-area:hd;font-size:.7rem}body.lp .top header img{width:20px}
+body.lp .badge{grid-area:bd;font-size:.65rem;padding:4px 10px}
+body.lp h1{grid-area:h1;font-size:1.9rem}
+body.lp .lede{grid-area:ld;font-size:.92rem;line-height:1.35}
+body.lp .mock{grid-area:mk;margin:6px 0 0;align-self:center}
+body.lp .mock img{width:100%;max-width:none;box-shadow:-8px 10px 0 -3px #2E8B3D,0 16px 26px rgba(0,0,0,.35)}
+body.lp .after-mock{display:none}
+body.lp ul.perks{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+body.lp ul.perks li{background:var(--surface);border-radius:10px;padding:7px 8px 7px 30px;font-size:.8rem;line-height:1.25;font-weight:600}
+body.lp ul.perks li:before{left:7px;top:7px;width:18px;height:18px;font-size:.65rem}
+body.lp form{padding:12px;gap:8px;border-radius:16px}
+body.lp form h2{font-size:1.05rem}
+body.lp .row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+body.lp label{font-size:.78rem;gap:3px}
+body.lp input[type=text],body.lp input[type=email],body.lp input[type=tel]{padding:10px 11px;font-size:1rem;border-radius:10px}
+body.lp .chk{font-size:.72rem;line-height:1.3;gap:8px}
+body.lp .chk input{width:18px;height:18px}
+body.lp .err{min-height:0}body.lp .err:empty{display:none}
+body.lp .btn.big{padding:14px;font-size:1.05rem}
+body.lp form .small{font-size:.72rem;margin-top:-2px}
+body.lp #cookie{padding:10px 12px;font-size:.75rem;gap:8px;line-height:1.35}
+body.lp #cookie button{padding:9px}
+[hidden]{display:none!important}
+body.lp .badge{justify-self:start}
+body.lp form h2{font-size:1rem}
+body.lp label small{display:inline;font-size:inherit}
